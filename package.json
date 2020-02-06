@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/Cristiandi/platturn-api#readme",
   "dependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "knex": "^0.20.8",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
