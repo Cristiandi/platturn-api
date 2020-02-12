@@ -45,7 +45,7 @@ const enviroment = {
   GCP_TYPE: process.env.GCP_TYPE,
   GCP_PROJECT_ID: process.env.GCP_PROJECT_ID,
   GCP_PRIVATE_KEY_ID: process.env.GCP_PRIVATE_KEY_ID,
-  GCP_PRIVATE_KEY: process.env.GCP_PRIVATE_KEY,
+  GCP_PRIVATE_KEY: process.env.GCP_PRIVATE_KEY.replace(/\\n/g, '\n'),
   GCP_CLIENT_EMAIL: process.env.GCP_CLIENT_EMAIL,
   GCP_CLIENT_ID: process.env.GCP_CLIENT_ID,
   GCP_AUTH_URI: process.env.GCP_AUTH_URI,
