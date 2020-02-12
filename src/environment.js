@@ -28,7 +28,7 @@ const enviroment = {
   /* GENERAL */
   NODE_ENV,
   TIME_ZONE: process.env.TIME_ZONE,
-  APP_PORT: process.env.APP_PORT || 8080,
+  APP_PORT: process.env.PORT || 8080,
   /* DATABASE INFORMATION */
   DB_NOSQL_HOST: process.env.DB_NOSQL_HOST,
   DB_NOSQL_USER: process.env.DB_NOSQL_USER,

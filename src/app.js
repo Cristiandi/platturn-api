@@ -34,7 +34,7 @@ app.use(cors());
 const { options: { app: fbApp } } = createFactoryBuilder({ app });
 
 // Run the server!
-fbApp.listen(APP_PORT, (err, address) => {
+fbApp.listen(process.env.PORT || APP_PORT, '0.0.0.0', (err, address) => {
   if (err) {
     app.log.error(err);
     process.exit(1);
