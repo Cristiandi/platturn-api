@@ -1,0 +1,69 @@
+{
+  "name": "platturn-api",
+  "version": "1.0.0",
+  "description": "platturn-api",
+  "engines": {
+    "node": "12.x"
+  },
+  "main": "./src/app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cm": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cristiandi/platturn-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cristiandi/platturn-api/issues"
+  },
+  "homepage": "https://github.com/Cristiandi/platturn-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "fastify": "^2.12.0",
+    "fastify-plugin": "^1.6.0",
+    "fastify-swagger": "^2.5.0",
+    "firebase-admin": "^8.9.2",
+    "knex": "^0.20.9",
+    "mysql": "^2.18.1",
+    "pino-pretty": "^3.5.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "8.3.5",
+    "@commitlint/config-conventional": "8.3.4",
+    "commitizen": "4.0.3",
+    "eslint": "6.8.0",
+    "eslint-config-standard": "14.1.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-node": "11.0.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-standard": "4.0.1",
+    "husky": "4.2.2",
+    "lint-staged": "10.0.7",
+    "nodemon": "2.0.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  }
+}
