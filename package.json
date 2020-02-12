@@ -2,6 +2,9 @@
   "name": "platturn-api",
   "version": "1.0.0",
   "description": "platturn-api",
+  "engines": {
+    "node": "12.x"
+  },
   "main": "./src/app.js",
   "scripts": {
     "start": "node ./src/app.js",
