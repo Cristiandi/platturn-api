@@ -1,7 +1,7 @@
 const fastify = require('fastify');
 const cors = require('cors');
 
-const { APP_PORT } = require('./environment');
+const { NODE_ENV, APP_PORT } = require('./environment');
 const { createFactoryBuilder } = require('./utils/functions');
 
 const app = fastify({
@@ -40,7 +40,7 @@ fbApp.listen(APP_PORT, (err, address) => {
     process.exit(1);
   }
 
-  app.log.info(`server listening on ${address}`);
+  app.log.info(`${NODE_ENV} | server listening on ${address}`);
 
   process.on('SIGINT', () => app.close());
   process.on('SIGTERM', () => app.close());

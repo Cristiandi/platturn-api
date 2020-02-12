@@ -1,16 +1,15 @@
-const path = require('path');
-const fs = require('fs');
 const firebaseAdmin = require('firebase-admin');
 
 const { NODE_ENV } = require('../environment');
+const serviceAccount = require(`./credentials/serviceAccountKey.${NODE_ENV}.js`);
 
 class FirebaseAdminService {
   constructor () {
-    const serviceAccountPath = path.resolve(__dirname, `./credentials/serviceAccountKey.${NODE_ENV}.json`);
+    // const serviceAccountPath = path.resolve(__dirname, `./credentials/serviceAccountKey.${NODE_ENV}.js`);
 
-    if (!fs.existsSync(serviceAccountPath)) throw new Error(`can't get ${serviceAccountPath}`);
+    // if (!fs.existsSync(serviceAccountPath)) throw new Error(`can't get ${serviceAccountPath}`);
 
-    this.admin = firebaseAdmin.initializeApp({ credential: firebaseAdmin.credential.cert(serviceAccountPath) });
+    this.admin = firebaseAdmin.initializeApp({ credential: firebaseAdmin.credential.cert(serviceAccount) });
   }
 
   /**
