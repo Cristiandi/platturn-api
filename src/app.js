@@ -12,6 +12,7 @@ const app = fastify({
 // plugins
 app.register(require('./plugins/knex-db-connector'), {});
 app.register(require('./plugins/firebase-admin-service'), {});
+app.register(require('./plugins/firebase-service', {}));
 app.register(require('./routes/api'), { prefix: 'api' });
 
 // hooks
