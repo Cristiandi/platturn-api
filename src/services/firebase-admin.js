@@ -1,7 +1,6 @@
 const firebaseAdmin = require('firebase-admin');
 
-const { NODE_ENV } = require('../environment');
-const serviceAccount = require(`./credentials/serviceAccountKey.${NODE_ENV}.js`);
+const serviceAccount = require(`./credentials/serviceAccountKey.js`);
 
 class FirebaseAdminService {
   constructor () {
@@ -10,6 +9,34 @@ class FirebaseAdminService {
     // if (!fs.existsSync(serviceAccountPath)) throw new Error(`can't get ${serviceAccountPath}`);
 
     this.admin = firebaseAdmin.initializeApp({ credential: firebaseAdmin.credential.cert(serviceAccount) });
+  }
+
+  /**
+   * funciton to create an user in firebase
+   *
+   * @param {{
+   * email: string,
+   * password: string,
+   * phone: string
+   * }} { email, password, phone }
+   * @returns {Promise<{
+   * uid: string,
+   * phoneNumber: string,
+   * email: string
+   * }>}
+   * @memberof FirebaseAdminService
+   */
+  async createUser ({ email, password, phone }) {
+    const objectToCreate = {
+      email,
+      password,
+      phoneNumber: `+57${phone}`
+    };
+
+    let userRecord = await this.admin.auth().createUser(objectToCreate);
+    userRecord = userRecord.toJSON();
+
+    return userRecord;
   }
 
   /**
