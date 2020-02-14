@@ -40,6 +40,28 @@ class FirebaseAdminService {
   }
 
   /**
+   * function to verify the token
+   *
+   * @param {string} token
+   * @returns {Promise<{
+   * aud: string,
+   * auth_time: number,
+   * exp: number,
+   * firebase: object,
+   * iat: number,
+   * iss: string,
+   * sub: string,
+   * uid: string
+   * }>}
+   * @memberof FirebaseAdminService
+   */
+  async verifyToken (token) {
+    const userFirebase = await this.admin.auth().verifyIdToken(token);
+
+    return userFirebase;
+  }
+
+  /**
    * function to delete the firebase app
    *
    * @memberof FirebaseAdmin
