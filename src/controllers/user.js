@@ -55,7 +55,9 @@ class UserController {
 
     const id = (await knex('User').insert(userObjec))[0];
 
-    const createdUser = await this.getOne({ id });
+    const createdUser = await this.getOne({ attribute: 'id', value: id });
+
+    if (!createdUser) throw throwError(`can't get user ${id}.`, 500);
 
     return createdUser;
   }
@@ -63,27 +65,35 @@ class UserController {
   /**
    * function to get one
    *
-   * @param {{ id: number }} { id }
+   * @param {{ attribute: string, value: string }} { attribute, value }
    * @returns {Promise<{id: number}>} object
    * @memberof PersonService
    */
-  async getOne ({ id }) {
-    if (!id) {
-      throw throwError(`id is needed`, 400);
+  async getOne ({ attribute, value }) {
+    if (!attribute || !value) {
+      throw throwError(`attribute or value are needed`, 400);
     }
 
-    const { knex } = this.app;
+    const getOneRow = require('./data-functions/commons/get-one-row').getOneRow(this.app);
 
-    const data = await knex.select('*').from('User').where({ id });
-
-    if (!data.length) {
-      throw throwError(`can't get the user ${id}.`, 412);
+    let user;
+    try {
+      user = await getOneRow('User', attribute, value, undefined, 412);
+    } catch (error) {
+      if (error.statusCode === 412) user = null;
+      else throw error;
     }
 
-    const [user] = data;
     return user;
   }
 
+  /**
+   * function to login
+   *
+   * @param {{ email: string, password: string }} { email, password }
+   * @returns {Promise<object>}
+   * @memberof UserController
+   */
   async login ({ email, password }) {
     const { firebaseService } = this.app;
 
