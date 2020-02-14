@@ -1,4 +1,6 @@
-const getOneRow = app => async (tableName, fieldName, fieldValue, customMessage = null) => {
+const { throwError } = require('../../../utils/functions');
+
+const getOneRow = app => async (tableName, fieldName, fieldValue, customMessage = undefined, customStatusCode = undefined) => {
   const { knex } = app;
   if (!knex) throw new Error(`can't get .knex from app`);
 
@@ -7,7 +9,7 @@ const getOneRow = app => async (tableName, fieldName, fieldValue, customMessage 
   const data = await query;
   if (!data.length) {
     const messageToTheError = customMessage || `can't get the ${tableName} row with ${fieldName} ${fieldValue}`;
-    throw new Error(messageToTheError);
+    throw throwError(messageToTheError, customStatusCode);
   }
 
   return data[0];

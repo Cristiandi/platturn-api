@@ -16,10 +16,17 @@ module.exports = {
     servers: [
       { url: `http://localhost:${APP_PORT}/api`, description: 'local development' },
       { url: 'https://platturn-api-dev.herokuapp.com/api', description: 'development' },
-      { url: 'https://sta.your-site.com', description: 'staging' },
+      { url: 'https://platturn-api-sta.herokuapp.com/api', description: 'staging' },
       { url: 'https://pro.your-site.com', description: 'production' }
     ],
-    schemes: ['http'],
+    schemes: ['http', 'https'],
+    securityDefinitions: {
+      Bearer: {
+        type: 'apiKey',
+        name: 'Authorization',
+        in: 'header'
+      }
+    },
     consumes: ['application/json'],
     produces: ['application/json'],
     tags: [
