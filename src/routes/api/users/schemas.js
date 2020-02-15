@@ -71,7 +71,7 @@ const createSchema = {
   tags,
   body: bodyCreateJsonSchema,
   security: {
-    Bearer: []
+    'token-credentials': []
   },
   response: {
     201: {
