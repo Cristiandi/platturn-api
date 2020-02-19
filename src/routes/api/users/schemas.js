@@ -17,7 +17,7 @@ const tags = ['user'];
 const paramsJsonSchema = {
   type: 'object',
   properties: {
-    personId: { type: 'number' }
+    userId: { type: 'number' }
   },
   required: ['userId']
 };
@@ -59,6 +59,9 @@ const getOneSchema = {
   tags,
   params: paramsJsonSchema,
   querystring: queryStringJsonSchema,
+  security: [
+    { Bearer: [] }
+  ],
   response: {
     200: {
       type: 'object',
@@ -71,7 +74,7 @@ const createSchema = {
   tags,
   body: bodyCreateJsonSchema,
   security: {
-    'token-credentials': []
+    Bearer: []
   },
   response: {
     201: {
@@ -116,11 +119,35 @@ const loginSchema = {
   }
 };
 
+const sendConfirmationEmailSchema = {
+  tags,
+  params: {
+    type: 'object',
+    properties: {
+      authUid: { type: 'string' }
+    },
+    required: ['authUid']
+  }
+};
+
+const confirmEmailAddressSchema = {
+  tags,
+  params: {
+    type: 'object',
+    properties: {
+      code: { type: 'string' }
+    },
+    required: ['code']
+  }
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
   createSchema,
   updateSchema,
   deleteSchema,
-  loginSchema
+  loginSchema,
+  sendConfirmationEmailSchema,
+  confirmEmailAddressSchema
 };

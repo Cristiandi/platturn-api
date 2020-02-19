@@ -1,5 +1,5 @@
 const { throwError } = require('../../utils/functions');
-const { UserController } = require('../../controllers/user');
+const { UserController } = require('../../controllers/user-controller');
 
 const API_KEY_PREFIX = '4cl';
 
@@ -30,9 +30,9 @@ const requestAuthorization = app => async (request, reply) => {
 
     const { uid } = verificationResult;
 
-    const userController = new UserController(app);
+    const userController = new UserController({ app });
 
-    const user = await userController.getOne({ attribute: 'authUid', value: uid });
+    const user = await userController.getOneUser({ attribute: 'authUid', value: uid });
 
     if (!user) {
       throw throwError(`can't get the user`, 401);
