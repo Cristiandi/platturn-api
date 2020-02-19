@@ -29,7 +29,7 @@ const enviroment = {
   NODE_ENV,
   TIME_ZONE: process.env.TIME_ZONE,
   APP_PORT: process.env.PORT || 8080,
-  /* DATABASE INFORMATION */
+  /* DATABASE */
   DB_NOSQL_HOST: process.env.DB_NOSQL_HOST,
   DB_NOSQL_USER: process.env.DB_NOSQL_USER,
   DB_NOSQL_PASSWORD: process.env.DB_NOSQL_PASSWORD,
@@ -60,7 +60,12 @@ const enviroment = {
   FIREBASE_STORAGE_BUCKET: process.env.FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID: process.env.FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID: process.env.FIREBASE_APP_ID,
-  FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID
+  FIREBASE_MEASUREMENT_ID: process.env.FIREBASE_MEASUREMENT_ID,
+  /* SMT */
+  SMTP_HOST: process.env.SMTP_HOST,
+  SMTP_PORT: process.env.SMTP_PORT,
+  SMTP_USER: process.env.SMTP_USER,
+  SMTP_PW: process.env.SMTP_PW
 };
 
 module.exports = enviroment;

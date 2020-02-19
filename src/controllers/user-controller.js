@@ -1,20 +1,16 @@
+const { Controller } = require('./controller');
 const { throwError } = require('../utils/functions');
 
-class UserController {
+class UserController extends Controller {
   /**
    * Creates an instance of UserController.
    * @param {object} app fastify app
    * @memberof UserController
    */
-  constructor (app) {
-    if (!app.ready) throw new Error(`can't get .ready from fastify app.`);
-    this.app = app;
+  constructor ({ app }) {
+    super({ app });
 
-    const { knex, firebaseAdminService, firebaseService } = this.app;
-
-    if (!knex) {
-      throw new Error('cant get .knex from fastify app.');
-    }
+    const { firebaseAdminService, firebaseService } = this.app;
     if (!firebaseAdminService) {
       throw new Error('cant get .firebaseAdminService from fastify app.');
     }
@@ -51,13 +47,7 @@ class UserController {
       phone
     };
 
-    const { knex } = this.app;
-
-    const id = (await knex('User').insert(userObjec))[0];
-
-    const createdUser = await this.getOne({ attribute: 'id', value: id });
-
-    if (!createdUser) throw throwError(`can't get user ${id}.`, 500);
+    const createdUser = await this.createOne({ tableName: 'User', objectToCreate: userObjec });
 
     return createdUser;
   }
@@ -69,20 +59,18 @@ class UserController {
    * @returns {Promise<{id: number}>} object
    * @memberof PersonService
    */
-  async getOne ({ attribute, value }) {
+  async getOneUser ({ attribute, value }) {
     if (!attribute || !value) {
       throw throwError(`attribute or value are needed`, 400);
     }
 
-    const getOneRow = require('./data-functions/commons/get-one-row').getOneRow(this.app);
-
-    let user;
-    try {
-      user = await getOneRow('User', attribute, value, undefined, 412);
-    } catch (error) {
-      if (error.statusCode === 412) user = null;
-      else throw error;
-    }
+    const user = await this.getOne({
+      tableName: 'User',
+      attributeName: attribute,
+      attributeValue: value,
+      message: `can't get a user.${attribute} = ${value}.`,
+      statusCode: 412
+    });
 
     return user;
   }
@@ -100,11 +88,15 @@ class UserController {
     // get the user
     const firebaseUser = await firebaseService.login({ email, password });
 
-    const getOneRow = require('./data-functions/commons/get-one-row').getOneRow(this.app);
+    // this.app.log.info('firebaseUser', firebaseUser);
 
-    this.app.log.info('firebaseUser', firebaseUser);
+    const { uid: authUid } = firebaseUser;
 
-    const user = await getOneRow('User', 'authUid', firebaseUser.uid);
+    const user = await this.getOneUser({ attribute: 'authUid', value: authUid });
+
+    if (!user) {
+      throw throwError(`can't get the user with authUid = ${authUid}`, 412);
+    }
 
     // get the accestoken
     const { stsTokenManager: { accessToken } } = firebaseUser;

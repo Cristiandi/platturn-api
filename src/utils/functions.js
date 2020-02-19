@@ -1,3 +1,8 @@
+const hbs = require('handlebars');
+const mjml2html = require('mjml');
+const fs = require('fs');
+const path = require('path');
+
 const isEmptyObject = (obj) => {
   return !Object.keys(obj).length;
 };
@@ -44,9 +49,41 @@ const getFromObjectPath = (object = {}, path = '') => {
   return iteraingObject;
 };
 
+/**
+ * function to generate the html from a template and its parameters
+ *
+ * @param {string} templateName name of the template inside email-templates folder
+ * @param {object} parameters parametes used to reder the template
+ * @param {object} [helpers=undefined] functions to be registred as helpers for the template
+ * @returns {string} html generated
+ */
+const generateHtmlByTemplate = (templateName, parameters, helpers = undefined, isReport = false) => {
+  // get the path of the template
+  const filePath = isReport ? `../templates/reports/${templateName}.hbs` : `../templates/emails/${templateName}.mjml`;
+  const templatePath = path.resolve(__dirname, filePath);
+
+  // compile the template
+  const template = hbs.compile(fs.readFileSync(templatePath, 'utf8'));
+
+  if (helpers) {
+    for (const helper of helpers) {
+      hbs.registerHelper(helper.name, helper.function);
+    }
+  }
+
+  // get the result
+  const result = template(parameters);
+
+  // get the html
+  const html = isReport ? result : mjml2html(result).html;
+
+  return html;
+};
+
 module.exports = {
   isEmptyObject,
   createFactoryBuilder,
   throwError,
-  getFromObjectPath
+  getFromObjectPath,
+  generateHtmlByTemplate
 };
