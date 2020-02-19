@@ -3,7 +3,9 @@ const { throwError } = require('../../../utils/functions');
 const {
   createSchema,
   getOneSchema,
-  loginSchema
+  loginSchema,
+  sendConfirmationEmailSchema,
+  confirmEmailAddressSchema
 } = require('./schemas');
 
 const userRoutes = async (app, options) => {
@@ -46,6 +48,25 @@ const userRoutes = async (app, options) => {
     app.log.info('body', body);
 
     const result = await userController.login({ email: body.email, password: body.password });
+    return result;
+  });
+
+  // send confirmation email
+  app.post('/send-confimation-email/:authUid', { schema: sendConfirmationEmailSchema }, async (request, reply) => {
+    const { params: { authUid } } = request;
+
+    const messageId = await userController.sendConfirmationEmail({ authUid });
+    app.log.info('messageId', messageId);
+
+    return reply.code(200).send();
+  });
+
+  // confirm email
+  app.get('/confirm-email-address/:code', { schema: confirmEmailAddressSchema }, async (request, reply) => {
+    const { params: { code } } = request;
+
+    const result = await userController.confirmEmailAddress({ code });
+
     return result;
   });
 };

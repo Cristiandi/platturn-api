@@ -62,6 +62,24 @@ class FirebaseAdminService {
   }
 
   /**
+   * function to the a user by uid (authUid)
+   *
+   * @param {{ uid: string }} { uid }
+   * @returns
+   * @memberof FirebaseAdminService
+   */
+  async getUserByUid ({ uid }) {
+    let firebaseUser;
+    try {
+      firebaseUser = await this.admin.auth().getUser(uid);
+    } catch (error) {
+      return undefined;
+    }
+
+    return firebaseUser.toJSON();
+  }
+
+  /**
    * function to delete the firebase app
    *
    * @memberof FirebaseAdmin

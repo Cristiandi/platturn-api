@@ -1,5 +1,8 @@
+const moment = require('moment');
+
 const { Controller } = require('./controller');
-const { throwError } = require('../utils/functions');
+const { throwError, generateHtmlByTemplate } = require('../utils/functions');
+const { VerificationCodeController } = require('../controllers/verification-code-controller');
 
 class UserController extends Controller {
   /**
@@ -10,24 +13,23 @@ class UserController extends Controller {
   constructor ({ app }) {
     super({ app });
 
-    const { firebaseAdminService, firebaseService } = this.app;
+    const { firebaseAdminService, firebaseService, mailerService } = this.app;
     if (!firebaseAdminService) {
       throw new Error('cant get .firebaseAdminService from fastify app.');
     }
     if (!firebaseService) {
       throw new Error('cant get .firebaseService from fastify app.');
     }
+    if (!mailerService) {
+      throw new Error('cant get .mailerService from fastify app.');
+    }
   }
 
   /**
+   * function to create an user
    *
-   *
-   * @param {{
-   * user: {
-   *  email: string
-   * }
-   * }} { user }
-   * @returns {Promise<object>} created user
+   * @param {{ user: object }} { user }
+   * @returns {Promise<{ id: number }>} created user
    * @memberof UserController
    */
   async createUser ({ user }) {
@@ -61,7 +63,7 @@ class UserController extends Controller {
    */
   async getOneUser ({ attribute, value }) {
     if (!attribute || !value) {
-      throw throwError(`attribute or value are needed`, 400);
+      throw throwError(`attribute and value are needed`, 400);
     }
 
     const user = await this.getOne({
@@ -102,6 +104,84 @@ class UserController extends Controller {
     const { stsTokenManager: { accessToken } } = firebaseUser;
 
     return { ...user, accessToken };
+  }
+
+  /**
+   * function to send the confirmation email
+   *
+   * @param {{ authUid: string }} { authUid }
+   * @returns {Promise<string>} message id of the email
+   * @memberof UserController
+   */
+  async sendConfirmationEmail ({ authUid }) {
+    const user = await this.getOneUser({ attribute: 'authUid', value: authUid });
+    if (!user) throw throwError(`can't the user.`, 412);
+
+    const { firebaseAdminService } = this.app;
+    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
+    if (!firebaseUser) throw throwError(`can't the user in firebase.`, 412);
+
+    const { emailVerified } = firebaseUser;
+    if (emailVerified) throw throwError(`email already confirmed.`, 412);
+
+    const { id } = user;
+    const verificationCodeController = new VerificationCodeController({ app: this.app });
+
+    const verificationCode = await verificationCodeController.createVerificationCode({
+      verificationCodeObj: {
+        userId: id,
+        expirationDate: moment().utc().add(1, 'd').toDate(),
+        type: 'CONFIRMATION_EMAIL'
+      }
+    });
+
+    // TODO: user a parameter
+    const SELF_API_UR = 'https://platturn-api-dev.herokuapp.com/api/';
+
+    const { fullName } = user;
+    const { code } = verificationCode;
+
+    const params = {
+      user: {
+        fullName
+      },
+      link: `${SELF_API_UR}users/confirm-email-address/${code}`
+    };
+
+    const html = generateHtmlByTemplate('confirmation-email', params);
+
+    // TODO: use a parameter
+    const CONFIRMATION_EMAIL_SUBJECT = 'Confirmación de email';
+
+    const { mailerService } = this.app;
+    const { email } = user;
+    const { messageId } = await mailerService.sendMail(
+      [email],
+      html,
+      CONFIRMATION_EMAIL_SUBJECT,
+      'awork-team'
+    );
+
+    return messageId;
+  }
+
+  /**
+   * function to confir the email adress
+   *
+   * @param {{ code: string }} { code }
+   * @returns {Promise<{ confirmed: boolean }>} message id of the email
+   * @memberof UserController
+   */
+  async confirmEmailAddress ({ code }) {
+    const verificationCodeController = new VerificationCodeController({ app: this.app });
+
+    const isTheCodeValid = await verificationCodeController.validCode({ code });
+
+    if (!isTheCodeValid) {
+      throw throwError(`the code is not valid`, 412);
+    }
+
+    return { confirmed: true };
   }
 }
 

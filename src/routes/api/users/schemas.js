@@ -119,11 +119,35 @@ const loginSchema = {
   }
 };
 
+const sendConfirmationEmailSchema = {
+  tags,
+  params: {
+    type: 'object',
+    properties: {
+      authUid: { type: 'string' }
+    },
+    required: ['authUid']
+  }
+};
+
+const confirmEmailAddressSchema = {
+  tags,
+  params: {
+    type: 'object',
+    properties: {
+      code: { type: 'string' }
+    },
+    required: ['code']
+  }
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
   createSchema,
   updateSchema,
   deleteSchema,
-  loginSchema
+  loginSchema,
+  sendConfirmationEmailSchema,
+  confirmEmailAddressSchema
 };
