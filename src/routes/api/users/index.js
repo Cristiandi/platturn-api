@@ -64,9 +64,9 @@ const userRoutes = async (app, options) => {
   app.get('/confirm-email-address/:code', { schema: confirmEmailAddressSchema }, async (request, reply) => {
     const { params: { code } } = request;
 
-    const result = await userController.confirmEmailAddress({ code });
+    const { redirectUrl } = await userController.confirmEmailAddress({ code });
 
-    return result;
+    return reply.redirect(redirectUrl);
   });
 };
 
