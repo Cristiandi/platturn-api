@@ -19,13 +19,13 @@ l<mjml>
     <mj-section background-color="#FFF" padding-top="0">
       <mj-column>
         <mj-text font-weight="bold">
-          Bienvenid@ a Platturn!
+          Gracias por confirmar tu email!
         </mj-text>
         <mj-text>
           Hola {{user.fullName}}.
         </mj-text>
         <mj-text>
-          Gracias por crear una cuenta en Platturn, esperamos puedas disfrutar la experiencia.
+          Ya haz confirmado tu email ahora puede ingresar a nuestra plataforma.
         </mj-text>
       </mj-column>
     </mj-section>
@@ -33,7 +33,7 @@ l<mjml>
     <mj-section background-color="#FFF" padding-top="0">
       <mj-column>
         <mj-button background-color="#1C69D3" color="white" href="{{link}}">
-          Verifica tu email
+          Inicia sesión
         </mj-button>
       </mj-column>
     </mj-section>

@@ -19,6 +19,18 @@ const seed = async (knex) => {
       name: 'FROM_EMAIL',
       value: 'no-reply@awork-team.co',
       description: 'email address used to send the mails'
+    },
+    {
+      id: 4,
+      name: 'WEB_BASE_URL',
+      value: 'https://platturn-web-dev.herokuapp.com/',
+      description: 'platturn web base url'
+    },
+    {
+      id: 5,
+      name: 'WELCOME_EMAIL_SUBJECT',
+      value: 'Gracias por confirmar tu email!',
+      description: 'platturn web base url'
     }
   ];
 

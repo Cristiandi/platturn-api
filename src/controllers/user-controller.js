@@ -185,7 +185,7 @@ class UserController extends Controller {
    * function to confir the email adress
    *
    * @param {{ code: string }} { code }
-   * @returns {Promise<{ confirmed: boolean }>} message id of the email
+   * @returns {Promise<{ message: string, redirectUrl: string }>} message id of the email
    * @memberof UserController
    */
   async confirmEmailAddress ({ code }) {
@@ -209,12 +209,57 @@ class UserController extends Controller {
 
     if (verifiedEmail) throw throwError(`the code was already used.`, 412);
 
+    const parameterController = new ParameterController({ app: this.app });
+    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' });
+
     await this.updateOneUser({
       id: userId,
       user: { verifiedEmail: true }
     });
 
-    return { confirmed: `yes! you had confirmed your email addres, we'll send you a welcome email.` };
+    await this.sendWelcomeEmail({ userId });
+
+    return {
+      message: `yes! you had confirmed your email addres, we'll send you a welcome email.`,
+      redirectUrl: `${WEB_BASE_URL}login`
+    };
+  }
+
+  async sendWelcomeEmail ({ userId }) {
+    const user = await this.getOneUser({
+      attribute: 'id',
+      value: userId
+    });
+
+    if (!user) throw throwError(`can't get the user ${userId}.`, 412);
+
+    const parameterController = new ParameterController({ app: this.app });
+
+    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' });
+
+    const WELCOME_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'WELCOME_EMAIL_SUBJECT' });
+
+    const { fullName } = user;
+
+    const params = {
+      user: {
+        fullName
+      },
+      link: `${WEB_BASE_URL}login`
+    };
+
+    const html = generateHtmlByTemplate('welcome-email', params);
+
+    const { mailerService } = this.app;
+    const { email } = user;
+    const { messageId } = await mailerService.sendMail(
+      [email],
+      html,
+      WELCOME_EMAIL_SUBJECT,
+      'awork-team'
+    );
+
+    return messageId;
   }
 }
 
