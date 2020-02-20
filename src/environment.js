@@ -65,7 +65,9 @@ const enviroment = {
   SMTP_HOST: process.env.SMTP_HOST,
   SMTP_PORT: process.env.SMTP_PORT,
   SMTP_USER: process.env.SMTP_USER,
-  SMTP_PW: process.env.SMTP_PW
+  SMTP_PW: process.env.SMTP_PW,
+  /* SELF */
+  SELF_API_URL: process.env.SELF_API_URL
 };
 
 module.exports = enviroment;
