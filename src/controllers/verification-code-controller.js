@@ -11,7 +11,7 @@ class VerificationCodeController extends Controller {
   }
 
   /**
-   *
+   * function to create a verification code row
    *
    * @param {{ verificationCodeObj: { userId: number, type: string, expirationDate: date }}} { verificationCodeObj }
    * @returns {Promise<{ id: number }>} created verification code object
@@ -56,6 +56,13 @@ class VerificationCodeController extends Controller {
     return verificationCode;
   }
 
+  /**
+   * function to determinate if a code is valid or not
+   *
+   * @param {{ code: string }} { code }
+   * @returns
+   * @memberof VerificationCodeController
+   */
   async validCode ({ code }) {
     const verificationCode = await this.getOneVerificationCode({ attribute: 'code', value: code });
     if (!verificationCode) {

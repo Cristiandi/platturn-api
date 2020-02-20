@@ -3,6 +3,7 @@ const moment = require('moment');
 const { Controller } = require('./controller');
 const { throwError, generateHtmlByTemplate } = require('../utils/functions');
 const { VerificationCodeController } = require('../controllers/verification-code-controller');
+const { ParameterController } = require('./parameter-controller');
 
 class UserController extends Controller {
   /**
@@ -135,8 +136,9 @@ class UserController extends Controller {
       }
     });
 
-    // TODO: user a parameter
-    const SELF_API_UR = 'https://platturn-api-dev.herokuapp.com/api/';
+    const parameterController = new ParameterController({ app: this.app });
+
+    const SELF_API_URL = await parameterController.getParameterValue({ name: 'SELF_API_URL' });
 
     const { fullName } = user;
     const { code } = verificationCode;
@@ -145,13 +147,12 @@ class UserController extends Controller {
       user: {
         fullName
       },
-      link: `${SELF_API_UR}users/confirm-email-address/${code}`
+      link: `${SELF_API_URL}users/confirm-email-address/${code}`
     };
 
     const html = generateHtmlByTemplate('confirmation-email', params);
 
-    // TODO: use a parameter
-    const CONFIRMATION_EMAIL_SUBJECT = 'Confirmación de email';
+    const CONFIRMATION_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'CONFIRMATION_EMAIL_SUBJECT' });
 
     const { mailerService } = this.app;
     const { email } = user;

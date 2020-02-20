@@ -49,14 +49,12 @@ class Controller {
    * @param {{
    * tableName: string,
    * attributeName: string,
-   * attributeValue: string,
-   * message: string,
-   * statusCode: number
+   * attributeValue: string
    * }} { tableName, attributeName, attributeValue, message = undefined, statusCode = undefined }
    * @returns
    * @memberof Controller
    */
-  async getOne ({ tableName, attributeName, attributeValue, message = undefined, statusCode = undefined }) {
+  async getOne ({ tableName, attributeName, attributeValue }) {
     const { knex } = this.app;
     if (!knex) throw new Error(`can't get .knex from app`);
 
