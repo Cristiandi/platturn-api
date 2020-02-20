@@ -19,7 +19,7 @@ l<mjml>
     <mj-section background-color="#FFF" padding-top="0">
       <mj-column>
         <mj-text font-weight="bold">
-          Bienvenido a Platturn!
+          Bienvenid@ a Platturn!
         </mj-text>
         <mj-text>
           Hola {{user.fullName}}

@@ -1,6 +1,8 @@
+const nodemailer = require('nodemailer');
+
 const environment = require('../environment');
 
-const nodemailer = require('nodemailer');
+const { ParameterController } = require('../controllers/parameter-controller');
 
 class MailerService {
   constructor ({ app }) {
@@ -62,8 +64,9 @@ class MailerService {
     // this.app.log.info('stringHtml', stringHtml);
     // this.app.log.info('---------------------------------');
 
-    // TODO: use a parameter
-    const FROM_EMAIL = 'no-reply@awork-team.co';
+    const parameterController = new ParameterController({ app: this.app });
+
+    const FROM_EMAIL = await parameterController.getParameterValue({ name: 'FROM_EMAIL' });
 
     const transporter = await this.createTransporter();
 

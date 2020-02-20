@@ -13,7 +13,6 @@ function buildApp () {
   app.register(require('./plugins/firebase-plugin', {}));
   app.register(require('./plugins/request-authorization-plugin', {}));
   app.register(require('./plugins/mailer-plugin', {}));
-  app.register(require('./routes/api'), { prefix: 'api' });
   // using helmet as plugin with fastify-helmet
   app.register(
     require('fastify-helmet'),
@@ -22,6 +21,14 @@ function buildApp () {
   );
 
   // hooks
+  app.addHook('preValidation', async (request, reply) => {
+    // Some code
+    const { req: { url } } = request;
+    if (url.startsWith('/api/documentation')) {
+      const { reqAuthPreHandler } = app;
+      await reqAuthPreHandler(request, reply);
+    }
+  });
   app.addHook('onClose', (instance, done) => {
     const { knex, firebaseAdminService } = instance;
     knex.destroy(async () => {
@@ -37,8 +44,9 @@ function buildApp () {
   // middlewares
   app.use(require('cors')());
 
-  // use the factory pattern to get the app
-  // const { options: { app: fbApp } } = createFactoryBuilder({ app });
+  // services
+  app.get('/', (require, reply) => reply.redirect('/api'));
+  app.register(require('./routes/api'), { prefix: 'api' });
 
   // Run the server!
   app.listen(process.env.PORT || APP_PORT, '0.0.0.0', (err, address) => {

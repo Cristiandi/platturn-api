@@ -55,8 +55,7 @@ const userRoutes = async (app, options) => {
   app.post('/send-confimation-email/:authUid', { schema: sendConfirmationEmailSchema }, async (request, reply) => {
     const { params: { authUid } } = request;
 
-    const messageId = await userController.sendConfirmationEmail({ authUid });
-    app.log.info('messageId', messageId);
+    await userController.sendConfirmationEmail({ authUid });
 
     return reply.code(200).send();
   });

@@ -73,9 +73,9 @@ const getOneSchema = {
 const createSchema = {
   tags,
   body: bodyCreateJsonSchema,
-  security: {
-    Bearer: []
-  },
+  security: [
+    { Bearer: [] }
+  ],
   response: {
     201: {
       type: 'object',
