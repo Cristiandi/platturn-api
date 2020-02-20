@@ -78,6 +78,16 @@ class UserController extends Controller {
     return user;
   }
 
+  async updateOneUser ({ id, user = {} }) {
+    const updatedUser = await this.updateOne({
+      tableName: 'User',
+      id,
+      objectToUpdate: user
+    });
+
+    return updatedUser;
+  }
+
   /**
    * function to login
    *
@@ -96,6 +106,11 @@ class UserController extends Controller {
     const { uid: authUid } = firebaseUser;
 
     const user = await this.getOneUser({ attribute: 'authUid', value: authUid });
+
+    const { verifiedEmail } = user;
+    if (!verifiedEmail) {
+      throw throwError(`your email address is not verified.`, 412);
+    }
 
     if (!user) {
       throw throwError(`can't get the user with authUid = ${authUid}`, 412);
@@ -122,8 +137,8 @@ class UserController extends Controller {
     const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
     if (!firebaseUser) throw throwError(`can't the user in firebase.`, 412);
 
-    const { emailVerified } = firebaseUser;
-    if (emailVerified) throw throwError(`email already confirmed.`, 412);
+    const { verifiedEmail } = user;
+    if (verifiedEmail) throw throwError(`email already confirmed.`, 412);
 
     const { id } = user;
     const verificationCodeController = new VerificationCodeController({ app: this.app });
@@ -182,7 +197,24 @@ class UserController extends Controller {
       throw throwError(`the code is not valid`, 412);
     }
 
-    return { confirmed: true };
+    const { userId } = await verificationCodeController.getOneVerificationCode({
+      attribute: 'code',
+      value: code
+    });
+
+    const { verifiedEmail } = await this.getOneUser({
+      attribute: 'id',
+      value: userId
+    });
+
+    if (verifiedEmail) throw throwError(`the code was already used.`, 412);
+
+    await this.updateOneUser({
+      id: userId,
+      user: { verifiedEmail: true }
+    });
+
+    return { confirmed: `yes! you had confirmed your email addres, we'll send you a welcome email.` };
   }
 }
 
