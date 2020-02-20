@@ -1,5 +1,5 @@
 
-const { throwError } = require('../utils/functions');
+const { throwError, isEmptyObject } = require('../utils/functions');
 
 class Controller {
   /**
@@ -19,13 +19,13 @@ class Controller {
   }
 
   /**
-   * function to create one row
+   * function to create one
    *
    * @param {{ tableName: string, objectToCreate: object }} { tableName, objectToCreate }
    * @returns {Promise<{id: number}>} created object
    * @memberof Controller
    */
-  async createOne ({ tableName, objectToCreate, message = undefined, statusCode = undefined }) {
+  async createOne ({ tableName, objectToCreate = {}, message = undefined, statusCode = undefined }) {
     const { knex } = this.app;
     if (!knex) throw new Error(`can't get .knex from app`);
 
@@ -67,6 +67,40 @@ class Controller {
     }
 
     return data[0];
+  }
+
+  /**
+   * function to update one
+   *
+   * @param {{ tableName: string, id: number, objectToUpdate: object }} { tableName, id, objectToUpdate = {} }
+   * @returns {Promise<{ id: number }>} updated object
+   * @memberof Controller
+   */
+  async updateOne ({ tableName, id, objectToUpdate = {} }) {
+    const rowBefore = await this.getOne({
+      tableName,
+      attributeName: 'id',
+      attributeValue: id
+    });
+
+    if (!rowBefore) {
+      throw throwError(`can't get the user ${id}.`, 412);
+    }
+
+    if (isEmptyObject(objectToUpdate)) return rowBefore;
+
+    const { knex } = this.app;
+    await knex(tableName)
+      .update(objectToUpdate)
+      .where({ id });
+
+    const rowAfter = await this.getOne({
+      tableName,
+      attributeName: 'id',
+      attributeValue: id
+    });
+
+    return rowAfter;
   }
 }
 

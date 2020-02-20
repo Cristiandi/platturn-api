@@ -24,7 +24,9 @@ function buildApp () {
   app.addHook('preValidation', async (request, reply) => {
     // Some code
     const { req: { url } } = request;
-    if (url.startsWith('/api/documentation')) {
+    if (url === '/api/documentation/json') {
+      app.log.info('cheking for json docs');
+    } else if (url.startsWith('/api/documentation')) {
       const { reqAuthPreHandler } = app;
       await reqAuthPreHandler(request, reply);
     }
@@ -49,7 +51,7 @@ function buildApp () {
   app.register(require('./routes/api'), { prefix: 'api' });
 
   // Run the server!
-  app.listen(process.env.PORT || APP_PORT, '0.0.0.0', (err, address) => {
+  app.listen(APP_PORT, '0.0.0.0', (err, address) => {
     if (err) {
       app.log.error(err);
       process.exit(1);
