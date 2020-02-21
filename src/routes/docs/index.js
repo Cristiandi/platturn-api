@@ -30,7 +30,8 @@ module.exports = {
     consumes: ['application/json'],
     produces: ['application/json'],
     tags: [
-      { name: 'user', description: 'User related end-points' }
+      { name: 'users', description: 'User related end-points' },
+      { name: 'potential-leads', description: 'PotentialLead related end-points' }
     ]
   }
 };

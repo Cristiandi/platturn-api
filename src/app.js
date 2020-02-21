@@ -8,17 +8,24 @@ function buildApp () {
   });
 
   // plugins
-  app.register(require('./plugins/knex-db-connector-plugin'), {});
-  app.register(require('./plugins/firebase-admin-plugin'), {});
-  app.register(require('./plugins/firebase-plugin', {}));
-  app.register(require('./plugins/request-authorization-plugin', {}));
-  app.register(require('./plugins/mailer-plugin', {}));
+
   // using helmet as plugin with fastify-helmet
   app.register(
     require('fastify-helmet'),
     // Example of passing an option to x-powered-by middleware
     { hidePoweredBy: { setTo: 'PHP 4.2.0' } }
   );
+
+  app.register(require('fastify-rate-limit'), {
+    global: false // default true
+  });
+
+  // my own plugins
+  app.register(require('./plugins/knex-db-connector-plugin'), {});
+  app.register(require('./plugins/firebase-admin-plugin'), {});
+  app.register(require('./plugins/firebase-plugin', {}));
+  app.register(require('./plugins/request-authorization-plugin', {}));
+  app.register(require('./plugins/mailer-plugin', {}));
 
   // hooks
   app.addHook('preValidation', async (request, reply) => {

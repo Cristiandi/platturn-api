@@ -23,7 +23,7 @@ const seed = async (knex) => {
     {
       id: 4,
       name: 'WEB_BASE_URL',
-      value: 'https://platturn-web-dev.herokuapp.com/',
+      value: environment.WEB_BASE_URL,
       description: 'platturn web base url'
     },
     {
@@ -31,6 +31,12 @@ const seed = async (knex) => {
       name: 'WELCOME_EMAIL_SUBJECT',
       value: 'Gracias por confirmar tu email!',
       description: 'platturn web base url'
+    },
+    {
+      id: 6,
+      name: 'POTENTIAL_LEAD_EMAIL_SUBJECT',
+      value: 'Gracias por tu interes!',
+      description: 'potential lead email subject'
     }
   ];
 
