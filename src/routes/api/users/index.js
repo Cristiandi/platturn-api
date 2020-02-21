@@ -5,7 +5,8 @@ const {
   getOneSchema,
   loginSchema,
   sendConfirmationEmailSchema,
-  confirmEmailAddressSchema
+  confirmEmailAddressSchema,
+  sendForgotPasswordEmailSchema
 } = require('./schemas');
 
 const userRoutes = async (app, options) => {
@@ -67,6 +68,15 @@ const userRoutes = async (app, options) => {
     const { redirectUrl } = await userController.confirmEmailAddress({ code });
 
     return reply.redirect(redirectUrl);
+  });
+
+  // send forgot password email
+  app.post('/send-forgot-password-email', { schema: sendForgotPasswordEmailSchema }, async (request, reply) => {
+    const { body: { email } } = request;
+
+    await userController.sendForgotPasswordEmail({ email });
+
+    return reply.code(200).send();
   });
 };
 

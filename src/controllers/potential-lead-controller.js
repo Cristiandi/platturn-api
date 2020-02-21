@@ -72,7 +72,7 @@ class PotentialLeadController extends Controller {
       link: WEB_BASE_URL
     };
 
-    const html = generateHtmlByTemplate('potential-lead', params);
+    const html = generateHtmlByTemplate('potential-lead-email', params);
 
     const POTENTIAL_LEAD_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'POTENTIAL_LEAD_EMAIL_SUBJECT' });
 

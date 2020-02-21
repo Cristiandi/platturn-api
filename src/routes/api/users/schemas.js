@@ -5,7 +5,7 @@ const userProperties = {
   fullName: { type: 'string', maxLength: 100 },
   password: { type: 'string', maxLength: 100 },
   document: { type: 'string' },
-  email: { type: 'string', pattern: '[a-z0-9\._%+!$&*=^|~#%{}\\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,22})' },
+  email: { type: 'string', maxLength: 100, pattern: '[a-z0-9\._%+!$&*=^|~#%{}\\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,22})' },
   address: { type: 'string', maxLength: 100 },
   phone: { type: 'number', maximum: 9999999999 },
   created_at: { type: 'string' },
@@ -141,6 +141,17 @@ const confirmEmailAddressSchema = {
   }
 };
 
+const sendForgotPasswordEmailSchema = {
+  tags,
+  body: {
+    type: 'object',
+    properties: {
+      email: { type: 'string', maxLength: 100, pattern: '[a-z0-9\._%+!$&*=^|~#%{}\\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,22})' }
+    },
+    required: ['email']
+  }
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
@@ -149,5 +160,6 @@ module.exports = {
   deleteSchema,
   loginSchema,
   sendConfirmationEmailSchema,
-  confirmEmailAddressSchema
+  confirmEmailAddressSchema,
+  sendForgotPasswordEmailSchema
 };
