@@ -70,8 +70,6 @@ class MailerService {
 
     const transporter = await this.createTransporter();
 
-    this.app.log.info('environment.NODE_ENV', environment.NODE_ENV);
-
     const subjectTo = environment.NODE_ENV === 'production' ? subject : `${environment.NODE_ENV} | ${subject}`;
 
     this.app.log.info('subjectTo', subjectTo);

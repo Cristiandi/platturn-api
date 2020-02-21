@@ -70,9 +70,7 @@ class UserController extends Controller {
     const user = await this.getOne({
       tableName: 'User',
       attributeName: attribute,
-      attributeValue: value,
-      message: `can't get a user.${attribute} = ${value}.`,
-      statusCode: 412
+      attributeValue: value
     });
 
     return user;

@@ -19,13 +19,13 @@
     <mj-section background-color="#FFF" padding-top="0">
       <mj-column>
         <mj-text font-weight="bold">
-          Gracias por confirmar tu email!
+          Gracias por intesarte!
         </mj-text>
         <mj-text>
-          Hola {{user.fullName}}.
+          Hola {{potencialLead.fullName}}.
         </mj-text>
         <mj-text>
-          Ya haz confirmado tu email ahora puede ingresar a nuestra plataforma.
+          Gracias por interesarte en nuestra platadorma, dentro de poco te contactaremos, para informarte un poco más.
         </mj-text>
       </mj-column>
     </mj-section>
@@ -33,7 +33,7 @@
     <mj-section background-color="#FFF" padding-top="0">
       <mj-column>
         <mj-button background-color="#1C69D3" color="white" href="{{link}}">
-          Inicia sesión
+          Más información
         </mj-button>
       </mj-column>
     </mj-section>

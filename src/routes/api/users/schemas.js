@@ -12,7 +12,7 @@ const userProperties = {
   updated_at: { type: 'string' }
 };
 
-const tags = ['user'];
+const tags = ['users'];
 
 const paramsJsonSchema = {
   type: 'object',
