@@ -80,6 +80,20 @@ class FirebaseAdminService {
   }
 
   /**
+   * function to update an user in firebase
+   *
+   * @param {{ uid: string, attributes: { password: string, email: string } }} { uid, attributes }
+   * @returns {Promise<object>} firebase updated used
+   * @memberof FirebaseAdminService
+   */
+  async updateUser ({ uid, attributes }) {
+    // Actualizo el usuario
+    const firebaseUpdatedUser = await this.admin.auth().updateUser(uid, attributes);
+
+    return firebaseUpdatedUser.toJSON();
+  }
+
+  /**
    * function to delete the firebase app
    *
    * @memberof FirebaseAdmin

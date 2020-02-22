@@ -59,14 +59,18 @@ class VerificationCodeController extends Controller {
   /**
    * function to determinate if a code is valid or not
    *
-   * @param {{ code: string }} { code }
+   * @param {{ code: string, type: string }} { code }
    * @returns
    * @memberof VerificationCodeController
    */
-  async validCode ({ code }) {
+  async validCode ({ code, type }) {
     const verificationCode = await this.getOneVerificationCode({ attribute: 'code', value: code });
     if (!verificationCode) {
       throw throwError(`can't the verificarion code`, 412);
+    }
+
+    if (type !== verificationCode.type) {
+      throw throwError(`the type ${type} doesn't match with the code.`, 412);
     }
 
     const { expirationDate } = verificationCode;
