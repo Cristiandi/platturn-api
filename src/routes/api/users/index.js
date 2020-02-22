@@ -7,7 +7,8 @@ const {
   sendConfirmationEmailSchema,
   confirmEmailAddressSchema,
   sendForgotPasswordEmailSchema,
-  changePasswordFromCodeSchema
+  changePasswordFromCodeSchema,
+  changePasswordSchema
 } = require('./schemas');
 
 const userRoutes = async (app, options) => {
@@ -80,12 +81,33 @@ const userRoutes = async (app, options) => {
     return reply.code(200).send();
   });
 
+  // change password from code that was sended in the email
   app.post('/change-password-from-code', { schema: changePasswordFromCodeSchema }, async (request, reply) => {
     const { body: { code, password, repeatedPassword } } = request;
 
     const result = await userController.changePasswordFromCode({ code, password, repeatedPassword });
 
     return reply.code(200).send(result);
+  });
+
+  // change the password for the corrent logged user
+  app.post('/change-password', { schema: changePasswordSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { user, body } = request;
+    if (!user) {
+      throw throwError(`can't get .user from request.`, 412);
+    }
+
+    const { email } = user;
+    const { oldPassword, password, repeatedPassword } = body;
+
+    const result = await userController.changePassword({
+      email,
+      oldPassword,
+      password,
+      repeatedPassword
+    });
+
+    return result;
   });
 };
 
