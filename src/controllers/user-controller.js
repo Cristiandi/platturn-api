@@ -243,9 +243,7 @@ class UserController extends Controller {
     if (!user) throw throwError(`can't get the user ${userId}.`, 412);
 
     const parameterController = new ParameterController({ app: this.app });
-
     const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' });
-
     const WELCOME_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'WELCOME_EMAIL_SUBJECT' });
 
     const { fullName } = user;
@@ -387,9 +385,54 @@ class UserController extends Controller {
     }
 
     await firebaseAdminService.updateUser({ uid: authUid, attributes: { password } });
+
+    this.sendPasswordChagedAlertEmail({ userId });
+
+    return {
+      userId,
+      passwordChanged: true
+    };
   }
 
-  async sendPasswordChagedAlertEmail ({ userId }) {}
+  /**
+   * function to get the send the password changed alert email
+   *
+   * @param {{ userId: number }} { userId }
+   * @returns {Promise<string>} message id
+   * @memberof UserController
+   */
+  async sendPasswordChagedAlertEmail ({ userId }) {
+    const user = await this.getOneUser({
+      attribute: 'id',
+      value: userId
+    });
+
+    if (!user) throw throwError(`can't get the user ${userId}.`, 412);
+
+    const parameterController = new ParameterController({ app: this.app });
+    const PASSWORD_CHANGED_ALERT_SUBJECT = await parameterController.getParameterValue({ name: 'PASSWORD_CHANGED_ALERT_SUBJECT' });
+
+    const { fullName } = user;
+
+    const params = {
+      user: {
+        fullName
+      }
+    };
+
+    const html = generateHtmlByTemplate('password-changed-alert-email', params);
+
+    const { mailerService } = this.app;
+    const { email } = user;
+    const { messageId } = await mailerService.sendMail(
+      [email],
+      html,
+      PASSWORD_CHANGED_ALERT_SUBJECT,
+      'awork-team'
+    );
+
+    return messageId;
+  }
 }
 
 module.exports = {

@@ -83,9 +83,9 @@ const userRoutes = async (app, options) => {
   app.post('/change-password-from-code', { schema: changePasswordFromCodeSchema }, async (request, reply) => {
     const { body: { code, password, repeatedPassword } } = request;
 
-    await userController.changePasswordFromCode({ code, password, repeatedPassword });
+    const result = await userController.changePasswordFromCode({ code, password, repeatedPassword });
 
-    return reply.code(200).send();
+    return reply.code(200).send(result);
   });
 };
 

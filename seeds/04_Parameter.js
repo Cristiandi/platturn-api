@@ -43,6 +43,12 @@ const seed = async (knex) => {
       name: 'FORGOT_PASSWORD_EMAIL_SUBJECT',
       value: 'Olvidaste tu clave...',
       description: 'forgot password email subject'
+    },
+    {
+      id: 8,
+      name: 'PASSWORD_CHANGED_ALERT_SUBJECT',
+      value: 'Tu clave cambio!',
+      description: 'password changed alert subject'
     }
   ];
 
