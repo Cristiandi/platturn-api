@@ -6,7 +6,8 @@ const {
   loginSchema,
   sendConfirmationEmailSchema,
   confirmEmailAddressSchema,
-  sendForgotPasswordEmailSchema
+  sendForgotPasswordEmailSchema,
+  changePasswordFromCodeSchema
 } = require('./schemas');
 
 const userRoutes = async (app, options) => {
@@ -75,6 +76,14 @@ const userRoutes = async (app, options) => {
     const { body: { email } } = request;
 
     await userController.sendForgotPasswordEmail({ email });
+
+    return reply.code(200).send();
+  });
+
+  app.post('/change-password-from-code', { schema: changePasswordFromCodeSchema }, async (request, reply) => {
+    const { body: { code, password, repeatedPassword } } = request;
+
+    await userController.changePasswordFromCode({ code, password, repeatedPassword });
 
     return reply.code(200).send();
   });

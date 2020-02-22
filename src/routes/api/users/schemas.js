@@ -152,6 +152,19 @@ const sendForgotPasswordEmailSchema = {
   }
 };
 
+const changePasswordFromCodeSchema = {
+  tags,
+  body: {
+    type: 'object',
+    properties: {
+      code: { type: 'string', maxLength: 20 },
+      password: { type: 'string', minLength: 5, maxLength: 100 },
+      repeatedPassword: { type: 'string', minLength: 5, maxLength: 100 }
+    },
+    required: ['code', 'password', 'repeatedPassword']
+  }
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
@@ -161,5 +174,6 @@ module.exports = {
   loginSchema,
   sendConfirmationEmailSchema,
   confirmEmailAddressSchema,
-  sendForgotPasswordEmailSchema
+  sendForgotPasswordEmailSchema,
+  changePasswordFromCodeSchema
 };

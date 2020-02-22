@@ -271,6 +271,13 @@ class UserController extends Controller {
     return messageId;
   }
 
+  /**
+   * function to send the forgot password email
+   *
+   * @param {{ email: string }} { email }
+   * @returns
+   * @memberof UserController
+   */
   async sendForgotPasswordEmail ({ email }) {
     // get the user
     const user = await this.getOneUser({
@@ -332,6 +339,57 @@ class UserController extends Controller {
 
     return messageId;
   }
+
+  /**
+   * function to change the password from the code sended in sendForgotPasswordEmail
+   *
+   * @param {{ code: string, password: string, repeatedPassword: string }} { code, password, repeatedPassword }
+   * @memberof UserController
+   */
+  async changePasswordFromCode ({ code, password, repeatedPassword }) {
+    // check the passwords
+    if (password !== repeatedPassword) {
+      throw throwError(`the passwords don't match`, 412);
+    }
+
+    const verificationCodeController = new VerificationCodeController({ app: this.app });
+
+    // check if the code is valid
+    const isTheCodeValid = await verificationCodeController.validCode({
+      code,
+      type: 'FORGOT_PASSWORD'
+    });
+
+    if (!isTheCodeValid) {
+      throw throwError(`the code is not valid.`, 412);
+    }
+
+    // get the user id from the verification code
+    const { userId } = await verificationCodeController.getOneVerificationCode({
+      attribute: 'code',
+      value: code
+    });
+
+    // get the user
+    const user = await this.getOneUser({
+      attribute: 'id',
+      value: userId
+    });
+
+    const { authUid } = user;
+
+    // get the user in firebase
+    const { firebaseAdminService } = this.app;
+    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
+    // check
+    if (!firebaseUser) {
+      throw throwError(`can't get the user in firebase.`, 412);
+    }
+
+    await firebaseAdminService.updateUser({ uid: authUid, attributes: { password } });
+  }
+
+  async sendPasswordChagedAlertEmail ({ userId }) {}
 }
 
 module.exports = {
