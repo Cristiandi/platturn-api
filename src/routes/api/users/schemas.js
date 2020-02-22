@@ -116,6 +116,15 @@ const loginSchema = {
       password: userProperties.password
     },
     required: ['email', 'password']
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        ...userProperties,
+        accessToken: { type: 'string' }
+      }
+    }
   }
 };
 
@@ -175,6 +184,17 @@ const changePasswordSchema = {
       repeatedPassword: { type: 'string', minLength: 5, maxLength: 100 }
     },
     required: ['password', 'repeatedPassword']
+  },
+  security: [
+    { Bearer: [] }
+  ],
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        accessToken: { type: 'string' }
+      }
+    }
   }
 };
 
