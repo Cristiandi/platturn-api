@@ -116,6 +116,15 @@ const loginSchema = {
       password: userProperties.password
     },
     required: ['email', 'password']
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        ...userProperties,
+        accessToken: { type: 'string' }
+      }
+    }
   }
 };
 
@@ -165,6 +174,30 @@ const changePasswordFromCodeSchema = {
   }
 };
 
+const changePasswordSchema = {
+  tags,
+  body: {
+    type: 'object',
+    properties: {
+      oldPassword: { type: 'string', minLength: 5, maxLength: 100 },
+      password: { type: 'string', minLength: 5, maxLength: 100 },
+      repeatedPassword: { type: 'string', minLength: 5, maxLength: 100 }
+    },
+    required: ['password', 'repeatedPassword']
+  },
+  security: [
+    { Bearer: [] }
+  ],
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        accessToken: { type: 'string' }
+      }
+    }
+  }
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
@@ -175,5 +208,6 @@ module.exports = {
   sendConfirmationEmailSchema,
   confirmEmailAddressSchema,
   sendForgotPasswordEmailSchema,
-  changePasswordFromCodeSchema
+  changePasswordFromCodeSchema,
+  changePasswordSchema
 };

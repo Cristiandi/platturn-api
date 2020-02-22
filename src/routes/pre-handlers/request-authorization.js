@@ -37,6 +37,8 @@ const requestAuthorization = app => async (request, reply) => {
     if (!user) {
       throw throwError(`can't get the user`, 401);
     }
+
+    request.user = user;
   } else {
     throw throwError('missing authorization header', 401);
   }

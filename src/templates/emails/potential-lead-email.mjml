@@ -25,7 +25,7 @@
           Hola {{potencialLead.fullName}}.
         </mj-text>
         <mj-text>
-          Gracias por interesarte en nuestra platadorma, dentro de poco te contactaremos, para informarte un poco más.
+          Gracias por interesarte en nuestra plataforma, dentro de poco te contactaremos, para informarte un poco más.
         </mj-text>
       </mj-column>
     </mj-section>

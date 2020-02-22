@@ -90,7 +90,7 @@ class UserController extends Controller {
    * function to login
    *
    * @param {{ email: string, password: string }} { email, password }
-   * @returns {Promise<object>}
+   * @returns {Promise<{ id: number, email:string, accessToken: string, authUid: string }>}
    * @memberof UserController
    */
   async login ({ email, password }) {
@@ -432,6 +432,41 @@ class UserController extends Controller {
     );
 
     return messageId;
+  }
+
+  /**
+   *
+   *
+   * @param {{ email: string, oldPassword: string, password: string, repeatedPassword: string }} { email, oldPassword, password, repeatedPassword }
+   * @returns
+   * @memberof UserController
+   */
+  async changePassword ({ email, oldPassword, password, repeatedPassword }) {
+    // check the passwords
+    if (password !== repeatedPassword) {
+      throw throwError(`the passwords don't match.`, 412);
+    }
+
+    // login the user with the old password
+    const { id: userId, authUid } = await this.login({
+      email,
+      password: oldPassword
+    });
+
+    // change the password
+    const { firebaseAdminService } = this.app;
+    await firebaseAdminService.updateUser({ uid: authUid, attributes: { password } });
+
+    // login the user with the new password
+    const { accessToken } = await this.login({
+      email,
+      password
+    });
+
+    // the the alert email
+    this.sendPasswordChagedAlertEmail({ userId });
+
+    return { accessToken };
   }
 }
 
