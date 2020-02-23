@@ -578,13 +578,7 @@ class UserController extends Controller {
   async updateUserData ({ currentUser, userData = {} }) {
     // check if the user data to update has data
     if (isEmptyObject(userData)) {
-      return {
-        id: currentUser.id,
-        fullName: currentUser.fullName,
-        document: currentUser.document,
-        address: currentUser.address,
-        phone: currentUser.phone
-      };
+      return currentUser;
     }
 
     // delete the important fields
@@ -606,13 +600,7 @@ class UserController extends Controller {
       });
     }
 
-    return {
-      id: updatedUser.id,
-      fullName: updatedUser.fullName,
-      document: updatedUser.document,
-      address: updatedUser.address,
-      phone: updatedUser.phone
-    };
+    return updatedUser;
   }
 }
 
