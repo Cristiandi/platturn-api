@@ -183,7 +183,7 @@ const changePasswordSchema = {
       password: { type: 'string', minLength: 5, maxLength: 100 },
       repeatedPassword: { type: 'string', minLength: 5, maxLength: 100 }
     },
-    required: ['password', 'repeatedPassword']
+    required: ['oldPassword', 'password', 'repeatedPassword']
   },
   security: [
     { Bearer: [] }
@@ -198,6 +198,21 @@ const changePasswordSchema = {
   }
 };
 
+const changeEmailAddressSchema = {
+  tags,
+  body: {
+    type: 'object',
+    properties: {
+      email: { type: 'string', minLength: 5, maxLength: 100, pattern: '[a-z0-9\._%+!$&*=^|~#%{}\\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,22})' },
+      repeatedEmail: { type: 'string', minLength: 5, maxLength: 100, pattern: '[a-z0-9\._%+!$&*=^|~#%{}\\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,22})' }
+    },
+    required: ['email', 'repeatedEmail']
+  },
+  security: [
+    { Bearer: [] }
+  ]
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
@@ -209,5 +224,6 @@ module.exports = {
   confirmEmailAddressSchema,
   sendForgotPasswordEmailSchema,
   changePasswordFromCodeSchema,
-  changePasswordSchema
+  changePasswordSchema,
+  changeEmailAddressSchema
 };

@@ -1,0 +1,38 @@
+l<mjml>
+
+  <mj-head>
+    <mj-style inline="inline">
+      body {
+        padding: 20px;
+      }
+
+      a {
+        color: #1C69D3
+      }
+    </mj-style>
+  </mj-head>
+
+  <mj-body background-color="#D8D8D8">
+
+    <mj-include path='./src/templates/emails/shared/header.mjml'></mj-include>
+
+    <mj-section background-color="#FFF" padding-top="0">
+      <mj-column>
+        <mj-text font-weight="bold">
+          Cambiaste tu dirección de correo electronico!
+        </mj-text>
+        <mj-text>
+          Hola {{user.fullName}}.
+        </mj-text>
+        <mj-text>
+          Has realizado un cambio de dirección de correo electronico, por lo tanto, esta dirección ya no te sera util para iniciar
+          sesión; si no fuiste tú y todo esto es una equivocación, por favor contactate con nuestro equipo de soporte.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-include path='./src/templates/emails/shared/footer.mjml'></mj-include>
+
+  </mj-body>
+
+</mjml>

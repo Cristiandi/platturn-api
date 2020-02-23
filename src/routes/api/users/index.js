@@ -8,7 +8,8 @@ const {
   confirmEmailAddressSchema,
   sendForgotPasswordEmailSchema,
   changePasswordFromCodeSchema,
-  changePasswordSchema
+  changePasswordSchema,
+  changeEmailAddressSchema
 } = require('./schemas');
 
 const userRoutes = async (app, options) => {
@@ -90,7 +91,7 @@ const userRoutes = async (app, options) => {
     return reply.code(200).send(result);
   });
 
-  // change the password for the corrent logged user
+  // change the password for a logged user
   app.post('/change-password', { schema: changePasswordSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const { user, body } = request;
     if (!user) {
@@ -105,6 +106,21 @@ const userRoutes = async (app, options) => {
       oldPassword,
       password,
       repeatedPassword
+    });
+
+    return result;
+  });
+
+  // change the email for a logged user
+  app.post('/change-email-address', { schema: changeEmailAddressSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { body, user: { email: currentUserEmail } } = request;
+
+    const { email, repeatedEmail } = body;
+
+    const result = await userController.changeEmailAdress({
+      oldEmail: currentUserEmail,
+      email,
+      repeatedEmail
     });
 
     return result;
