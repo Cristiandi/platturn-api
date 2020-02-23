@@ -9,7 +9,8 @@ const {
   sendForgotPasswordEmailSchema,
   changePasswordFromCodeSchema,
   changePasswordSchema,
-  changeEmailAddressSchema
+  changeEmailAddressSchema,
+  updateUserDataSchema
 } = require('./schemas');
 
 const userRoutes = async (app, options) => {
@@ -124,6 +125,13 @@ const userRoutes = async (app, options) => {
     });
 
     return result;
+  });
+
+  // change user the user data from the logged user
+  app.patch('/update-user-data', { schema: updateUserDataSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { user, body } = request;
+    const updatedUserData = await userController.updateUserData({ currentUser: user, userData: body });
+    return updatedUserData;
   });
 };
 

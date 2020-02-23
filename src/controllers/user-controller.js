@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const { Controller } = require('./controller');
-const { throwError, generateHtmlByTemplate } = require('../utils/functions');
+const { throwError, generateHtmlByTemplate, isEmptyObject } = require('../utils/functions');
 const { VerificationCodeController } = require('../controllers/verification-code-controller');
 const { ParameterController } = require('./parameter-controller');
 
@@ -566,6 +566,41 @@ class UserController extends Controller {
     );
 
     return messageId;
+  }
+
+  /**
+   * function to update the user data
+   *
+   * @param {{ currentUser: object, userData: object }} { currentUser, userData = {} }
+   * @returns {Promise<{ id: number }>}
+   * @memberof UserController
+   */
+  async updateUserData ({ currentUser, userData = {} }) {
+    // check if the user data to update has data
+    if (isEmptyObject(userData)) {
+      return currentUser;
+    }
+
+    // delete the important fields
+    if (userData.password) delete userData.password;
+    if (userData.email) delete userData.email;
+
+    const { id: userId } = currentUser;
+
+    // update the user data
+    const updatedUser = await this.updateOneUser({ id: userId, user: userData });
+
+    if (!userData.phone) {
+      const { firebaseAdminService } = this.app;
+      await firebaseAdminService.updateUser({
+        uid: currentUser.authUid,
+        attributes: {
+          phone: userData.phone
+        }
+      });
+    }
+
+    return updatedUser;
   }
 }
 
