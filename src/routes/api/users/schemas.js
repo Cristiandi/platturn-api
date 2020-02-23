@@ -213,6 +213,19 @@ const changeEmailAddressSchema = {
   ]
 };
 
+const updateUserDataSchema = {
+  tags,
+  body: {
+    type: 'object',
+    properties: {
+      fullName: { type: 'string', minLength: 5, maxLength: 150 },
+      document: { type: 'string', minLength: 5, maxLength: 15 },
+      address: { type: 'string', minLength: 10, maxLength: 150 },
+      phone: { type: 'number', maximum: 9999999999 }
+    }
+  }
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
@@ -225,5 +238,6 @@ module.exports = {
   sendForgotPasswordEmailSchema,
   changePasswordFromCodeSchema,
   changePasswordSchema,
-  changeEmailAddressSchema
+  changeEmailAddressSchema,
+  updateUserDataSchema
 };
