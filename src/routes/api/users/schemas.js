@@ -223,6 +223,15 @@ const updateUserDataSchema = {
       address: { type: 'string', minLength: 10, maxLength: 150 },
       phone: { type: 'number', maximum: 9999999999 }
     }
+  },
+  security: [
+    { Bearer: [] }
+  ],
+  response: {
+    200: {
+      type: 'object',
+      properties: userProperties
+    }
   }
 };
 
