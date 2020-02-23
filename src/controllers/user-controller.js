@@ -435,7 +435,7 @@ class UserController extends Controller {
   }
 
   /**
-   *
+   * function to change the password
    *
    * @param {{ email: string, oldPassword: string, password: string, repeatedPassword: string }} { email, oldPassword, password, repeatedPassword }
    * @returns
@@ -467,6 +467,105 @@ class UserController extends Controller {
     this.sendPasswordChagedAlertEmail({ userId });
 
     return { accessToken };
+  }
+
+  /**
+   * function to change the email
+   *
+   * @param {{ oldEmail: string, email: string, repeatedEmail: string }} { oldEmail, email, repeatedEmail }
+   * @memberof UserController
+   */
+  async changeEmailAdress ({ oldEmail, email, repeatedEmail }) {
+    if (oldEmail === email) {
+      throw throwError(`the email can't be the current email.`, 412);
+    }
+    if (email !== repeatedEmail) {
+      throw throwError(`the emails don't match.`, 412);
+    }
+
+    // get the user
+    const user = await this.getOneUser({
+      attribute: 'email',
+      value: oldEmail
+    });
+    // check
+    if (!user) {
+      throw throwError(`can't get the user.`, 412);
+    }
+
+    const { authUid } = user;
+
+    // get the firebase user
+    const { firebaseAdminService } = this.app;
+    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
+    if (!firebaseUser) {
+      throw throwError(`can't get the firebase user.`, 412);
+    }
+
+    // update the email
+    await firebaseAdminService.updateUser({ uid: authUid, attributes: { email } });
+
+    const { id: userId } = user;
+
+    await this.updateOneUser({
+      id: userId,
+      user: {
+        email: email,
+        verifiedEmail: false
+      }
+    });
+
+    // send the alert email
+    this.sendEmailAdressChangedEmail({ oldEmail, userId });
+
+    // send the confirmation email
+    this.sendConfirmationEmail({ authUid });
+
+    return {
+      userId,
+      emailChanged: true
+    };
+  }
+
+  /**
+   * function to send an email to altert the email changed event
+   *
+   * @param {{ oldEmail: string, userId: number }} { oldEmail, userId }
+   * @returns
+   * @memberof UserController
+   */
+  async sendEmailAdressChangedEmail ({ oldEmail, userId }) {
+    // get the user
+    const user = await this.getOneUser({
+      attribute: 'id',
+      value: userId
+    });
+    if (!user) {
+      throw throwError(`can't get the user.`, 412);
+    }
+
+    const { fullName } = user;
+
+    const params = {
+      user: {
+        fullName
+      }
+    };
+
+    const html = generateHtmlByTemplate('email-changed-alert-email', params);
+
+    const parameterController = new ParameterController({ app: this.app });
+    const EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT = await parameterController.getParameterValue({ name: 'EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT' });
+
+    const { mailerService } = this.app;
+    const { messageId } = await mailerService.sendMail(
+      [oldEmail],
+      html,
+      EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT,
+      'awork-team'
+    );
+
+    return messageId;
   }
 }
 
