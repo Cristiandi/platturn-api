@@ -133,6 +133,11 @@ const userRoutes = async (app, options) => {
     const updatedUserData = await userController.updateUserData({ currentUser: user, userData: body });
     return updatedUserData;
   });
+
+  // validate token
+  app.get('/validate-token', { preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    return reply.code(200).send();
+  });
 };
 
 module.exports = userRoutes;
