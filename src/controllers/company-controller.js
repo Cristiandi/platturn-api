@@ -1,5 +1,5 @@
 const { Controller } = require('./controller');
-const { throwError } = require('../utils/functions');
+const { throwError, isEmptyObject } = require('../utils/functions');
 
 class CompanyController extends Controller {
   constructor ({ app }) {
@@ -61,6 +61,50 @@ class CompanyController extends Controller {
     });
 
     return user;
+  }
+
+  /**
+   * function to update a company
+   *
+   * @param {{ loggedUserId: number, companyId: number, company: object }} { loggedUserId, companyId, company }
+   * @returns
+   * @memberof CompanyController
+   */
+  async updatecompany ({ loggedUserId, companyId, company }) {
+    // get the company
+    const currentCompany = await this.getOneCompany({
+      attribute: 'id',
+      value: companyId
+    });
+
+    // check
+    if (!currentCompany) {
+      throw throwError(`can't the company ${companyId}`, 412);
+    }
+    if (currentCompany.userId !== loggedUserId) {
+      throw throwError(`the user can't update the company ${companyId}`, 412);
+    }
+
+    if (isEmptyObject(company)) return currentCompany;
+
+    const { email } = company;
+    if (email) {
+      const existingCompanyForEmail = await this.getOneCompany({
+        attribute: 'email',
+        value: email
+      });
+      if (existingCompanyForEmail && currentCompany.id !== existingCompanyForEmail.id) {
+        throw throwError(`the email ${email} is already used.`, 412);
+      }
+    }
+
+    const updatedCompany = this.updateOne({
+      tableName: 'Company',
+      id: companyId,
+      objectToUpdate: company
+    });
+
+    return updatedCompany;
   }
 }
 

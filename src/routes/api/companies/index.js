@@ -1,6 +1,7 @@
 const {
   createSchema,
-  getUserCompanies
+  getUserCompanies,
+  updateSchema
 } = require('./schemas');
 const { CompanyController } = require('../../../controllers/company-controller');
 
@@ -29,6 +30,18 @@ const companyRoutes = async (app, options) => {
     });
 
     return [company];
+  });
+
+  app.patch('/:companyId', { schema: updateSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { body, user: { id: userId }, params: { companyId } } = request;
+
+    const updatedCompany = await companyController.updatecompany({
+      loggedUserId: userId,
+      companyId,
+      company: body
+    });
+
+    return updatedCompany;
   });
 };
 
