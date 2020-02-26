@@ -4,6 +4,7 @@ const apiRoutes = async (app, options) => {
   app.register(oas, require('../docs'));
   app.register(require('./users'), { prefix: 'users' });
   app.register(require('./potential-leads'), { prefix: 'potential-leads' });
+  app.register(require('./companies'), { prefix: 'companies' });
   app.get('/', { schema: { hide: true } }, async (request, reply) => {
     return { hello: 'world' };
   });

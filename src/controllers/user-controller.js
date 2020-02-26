@@ -484,16 +484,26 @@ class UserController extends Controller {
     }
 
     // get the user
-    const user = await this.getOneUser({
+    const currentUser = await this.getOneUser({
       attribute: 'email',
       value: oldEmail
     });
     // check
-    if (!user) {
+    if (!currentUser) {
       throw throwError(`can't get the user.`, 412);
     }
 
-    const { authUid } = user;
+    // check if there an user with the email
+    const existingUserForTheEmail = await this.getOneUser({
+      attribute: 'email',
+      value: email
+    });
+    // check
+    if (existingUserForTheEmail && existingUserForTheEmail.id !== currentUser.id) {
+      throw throwError(`the email ${email} is already used.`, 412);
+    }
+
+    const { authUid } = currentUser;
 
     // get the firebase user
     const { firebaseAdminService } = this.app;
@@ -505,7 +515,7 @@ class UserController extends Controller {
     // update the email
     await firebaseAdminService.updateUser({ uid: authUid, attributes: { email } });
 
-    const { id: userId } = user;
+    const { id: userId } = currentUser;
 
     await this.updateOneUser({
       id: userId,

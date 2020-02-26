@@ -31,7 +31,8 @@ module.exports = {
     produces: ['application/json'],
     tags: [
       { name: 'users', description: 'User related end-points' },
-      { name: 'potential-leads', description: 'PotentialLead related end-points' }
+      { name: 'potential-leads', description: 'PotentialLead related end-points' },
+      { name: 'companies', description: 'Company related end-points' }
     ]
   }
 };
