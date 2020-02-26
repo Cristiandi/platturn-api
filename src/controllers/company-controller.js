@@ -25,6 +25,15 @@ class CompanyController extends Controller {
       throw throwError(`a company already exists for the code ${code}.`, 412);
     }
 
+    const existingCompanyForUser = await this.getOneCompany({
+      attribute: 'userId',
+      value: company.userId
+    });
+
+    if (existingCompanyForUser) {
+      throw throwError(`the user already had created a company.`, 412);
+    }
+
     const createdCompany = await this.createOne({
       tableName: 'Company',
       objectToCreate: company

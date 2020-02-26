@@ -6,7 +6,9 @@ const companyPorperties = {
   code: { type: 'string', maxLength: 5 },
   document: { type: 'string', maxLength: 15 },
   email: { type: 'string', maxLength: 100, pattern: '[a-z0-9\._%+!$&*=^|~#%{}\\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,22})' },
-  userId: { type: 'number' }
+  userId: { type: 'number' },
+  created_at: { type: 'string' },
+  updated_at: { type: 'string' }
 };
 
 const tags = ['companies'];
@@ -113,10 +115,27 @@ const deleteSchema = {
   }
 };
 
+const getUserCompanies = {
+  tags,
+  security: [
+    { Bearer: [] }
+  ],
+  response: {
+    200: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: companyPorperties
+      }
+    }
+  }
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
   createSchema,
   updateSchema,
-  deleteSchema
+  deleteSchema,
+  getUserCompanies
 };

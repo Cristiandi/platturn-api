@@ -493,6 +493,16 @@ class UserController extends Controller {
       throw throwError(`can't get the user.`, 412);
     }
 
+    // check if there an user with the email
+    const existingUserForTheEmail = await this.getOneUser({
+      attribute: 'email',
+      value: email
+    });
+    // check
+    if (!existingUserForTheEmail) {
+      throw throwError(`the email ${email} is already used.`, 412);
+    }
+
     const { authUid } = user;
 
     // get the firebase user

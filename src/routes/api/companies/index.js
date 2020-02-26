@@ -1,5 +1,6 @@
 const {
-  createSchema
+  createSchema,
+  getUserCompanies
 } = require('./schemas');
 const { CompanyController } = require('../../../controllers/company-controller');
 
@@ -16,6 +17,18 @@ const companyRoutes = async (app, options) => {
     const createdCompany = await companyController.createCompany({ company: { ...body, userId } });
 
     return createdCompany;
+  });
+
+  // get the companies for a user
+  app.get('/get-user-companies', { schema: getUserCompanies, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { user: { id: userId } } = request;
+
+    const company = await companyController.getOneCompany({
+      attribute: 'userId',
+      value: userId
+    });
+
+    return [company];
   });
 };
 
