@@ -79,7 +79,10 @@ const createSchema = {
   response: {
     201: {
       type: 'object',
-      properties: userProperties
+      properties: {
+        ...userProperties,
+        message: { type: 'string' }
+      }
     }
   }
 };

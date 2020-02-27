@@ -20,13 +20,16 @@ const userRoutes = async (app, options) => {
   const userController = new UserController({ app });
 
   // create
-  app.post('/', { schema: createSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+  app.post('/', { schema: createSchema }, async (request, reply) => {
     const { body } = request;
 
     app.log.info('body', body);
 
     const created = await userController.createUser({ user: body });
-    return reply.code(201).send(created);
+    return reply.code(201).send({
+      ...created,
+      message: 'we have sent you an email to confirm your email address.'
+    });
   });
 
   // get one
