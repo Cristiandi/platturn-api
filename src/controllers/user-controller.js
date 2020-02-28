@@ -320,7 +320,7 @@ class UserController extends Controller {
       user: {
         fullName
       },
-      link: `${WEB_BASE_URL}forgot-password/${code}`
+      link: `${WEB_BASE_URL}reset-password?code=${code}`
     };
 
     // generate the html

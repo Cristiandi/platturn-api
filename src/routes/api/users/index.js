@@ -26,10 +26,7 @@ const userRoutes = async (app, options) => {
     app.log.info('body', body);
 
     const created = await userController.createUser({ user: body });
-    return reply.code(201).send({
-      ...created,
-      message: 'we have sent you an email to confirm your email address.'
-    });
+    return reply.code(201).send(created);
   });
 
   // get one
@@ -65,7 +62,7 @@ const userRoutes = async (app, options) => {
 
     await userController.sendConfirmationEmail({ authUid });
 
-    return reply.code(200).send();
+    return reply.code(200).send({ message: 'we have sent you an email to confirm your email address.' });
   });
 
   // confirm email
@@ -83,7 +80,7 @@ const userRoutes = async (app, options) => {
 
     await userController.sendForgotPasswordEmail({ email });
 
-    return reply.code(200).send();
+    return reply.code(200).send({ message: 'we have sent you an email to reset your password.' });
   });
 
   // change password from code that was sended in the email
@@ -92,7 +89,10 @@ const userRoutes = async (app, options) => {
 
     const result = await userController.changePasswordFromCode({ code, password, repeatedPassword });
 
-    return reply.code(200).send(result);
+    return reply.code(200).send({
+      ...result,
+      message: 'password changed, now you can login.'
+    });
   });
 
   // change the password for a logged user
@@ -112,7 +112,10 @@ const userRoutes = async (app, options) => {
       repeatedPassword
     });
 
-    return result;
+    return {
+      ...result,
+      message: 'password changed.'
+    };
   });
 
   // change the email for a logged user
