@@ -130,7 +130,7 @@ const userRoutes = async (app, options) => {
       repeatedEmail
     });
 
-    return result;
+    return { ...result, message: 'email changed.' };
   });
 
   // change user the user data from the logged user

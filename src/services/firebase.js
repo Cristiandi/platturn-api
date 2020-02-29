@@ -28,7 +28,7 @@ class FirebaseService {
     } catch (error) {
       const code = error.code;
       if (code && code.startsWith('auth')) {
-        throw throwError(`email or password are wrong,`, 401);
+        throw throwError(`email or password are wrong.`, 401);
       }
       throw error;
     }
