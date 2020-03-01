@@ -195,7 +195,8 @@ const changePasswordSchema = {
     200: {
       type: 'object',
       properties: {
-        accessToken: { type: 'string' }
+        accessToken: { type: 'string' },
+        message: { type: 'string' }
       }
     }
   }
