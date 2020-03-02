@@ -137,7 +137,7 @@ const userRoutes = async (app, options) => {
   app.patch('/update-user-data', { schema: updateUserDataSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const { user, body } = request;
     const updatedUserData = await userController.updateUserData({ currentUser: user, userData: body });
-    return updatedUserData;
+    return { ...updatedUserData, message: 'infomation updated.' };
   });
 
   // validate token

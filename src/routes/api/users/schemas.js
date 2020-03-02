@@ -234,7 +234,10 @@ const updateUserDataSchema = {
   response: {
     200: {
       type: 'object',
-      properties: userProperties
+      properties: {
+        ...userProperties,
+        message: { type: 'string' }
+      }
     }
   }
 };
