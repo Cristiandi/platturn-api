@@ -612,6 +612,29 @@ class UserController extends Controller {
 
     return updatedUser;
   }
+
+  /**
+   * function to get the assigned roles
+   *
+   * @param {{ userId: number }} { userId }
+   * @returns {Promise<{ id: number }>[]} ssigned roles array
+   * @memberof UserController
+   */
+  async getAssignedRoles ({ userId }) {
+    const { knex } = this.app;
+
+    const query = knex.select('R.*')
+      .from('User as U')
+      .innerJoin('AssignedRole as AR', 'U.id', '=', 'AR.userId')
+      .innerJoin('Role as R', 'AR.roleId', '=', 'R.id')
+      .where('U.id', '=', userId);
+
+    // this.app.log.info('query', query.toString());
+
+    const data = await query;
+
+    return data;
+  }
 }
 
 module.exports = {

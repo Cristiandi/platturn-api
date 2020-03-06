@@ -70,6 +70,34 @@ class Controller {
   }
 
   /**
+   * function to get all
+   *
+   * @param {{
+   * tableName: string.
+   * attributeName: string,
+   * attributeValue: any
+   * }} { tableName, attributeName = null, attributeValue = null }
+   * @returns
+   * @memberof Controller
+   */
+  async getAll ({ tableName, attributeName = null, attributeValue = null }) {
+    const { knex } = this.app;
+    if (!knex) throw new Error(`can't get .knex from app`);
+
+    let query = knex.select('*').from(tableName);
+
+    if (attributeName !== null) {
+      query = query.where({ [attributeName]: attributeValue });
+    }
+
+    query = query.orderBy('id');
+
+    const data = await query;
+
+    return data;
+  }
+
+  /**
    * function to update one
    *
    * @param {{ tableName: string, id: number, objectToUpdate: object }} { tableName, id, objectToUpdate = {} }
