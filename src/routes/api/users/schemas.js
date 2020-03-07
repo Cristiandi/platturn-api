@@ -242,6 +242,12 @@ const updateUserDataSchema = {
   }
 };
 
+const getUserScreensSchema = {
+  security: [
+    { Bearer: [] }
+  ]
+};
+
 module.exports = {
   getAllSchema,
   getOneSchema,
@@ -255,5 +261,6 @@ module.exports = {
   changePasswordFromCodeSchema,
   changePasswordSchema,
   changeEmailAddressSchema,
-  updateUserDataSchema
+  updateUserDataSchema,
+  getUserScreensSchema
 };
