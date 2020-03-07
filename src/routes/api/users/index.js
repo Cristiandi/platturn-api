@@ -10,7 +10,8 @@ const {
   changePasswordFromCodeSchema,
   changePasswordSchema,
   changeEmailAddressSchema,
-  updateUserDataSchema
+  updateUserDataSchema,
+  getUserScreensSchema
 } = require('./schemas');
 
 const userRoutes = async (app, options) => {
@@ -144,6 +145,18 @@ const userRoutes = async (app, options) => {
   app.get('/validate-token', { preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     return reply.code(200).send();
   });
+
+  // get user screens
+  app.get(
+    '/get-user-screens',
+    { schema: getUserScreensSchema, preHandler: [reqAuthPreHandler] },
+    async (request, reply) => {
+      const { user } = request;
+
+      const screens = await userController.getUserScreens({ userId: user.id });
+
+      return screens;
+    });
 };
 
 module.exports = userRoutes;

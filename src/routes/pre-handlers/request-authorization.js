@@ -37,7 +37,6 @@ const getTheUserByToken = async (app, token) => {
 };
 
 const canTheUserHaveThis = async (app, userId, url) => {
-  app.log.info('url', url);
   const userController = new UserController({ app });
 
   // get the user roles
@@ -55,8 +54,8 @@ const canTheUserHaveThis = async (app, userId, url) => {
 
   // try to get the requested route
   const opts = {
-    strict: false,
-    sensitive: false,
+    strict: true,
+    sensitive: true,
     end: true,
     decode: decodeURIComponent
   };
@@ -74,6 +73,8 @@ const canTheUserHaveThis = async (app, userId, url) => {
       break;
     }
   }
+
+  // app.log.info('requestedRoute', requestedRoute);
 
   // check the route
   if (!requestedRoute) {

@@ -635,6 +635,35 @@ class UserController extends Controller {
 
     return data;
   }
+
+  /**
+   * function to get the user allowed screens
+   *
+   * @param {{
+   * userId: number
+   * }} { userId }
+   * @returns {Promise<{ id: number }>[]} screens
+   * @memberof UserController
+   */
+  async getUserScreens ({ userId }) {
+    const { knex } = this.app;
+
+    const query = knex.select('S.*')
+      .from('User as U')
+      .innerJoin('AssignedRole as AR', 'U.id', '=', 'AR.userId')
+      .innerJoin('Role as R', 'AR.roleId', '=', 'R.id')
+      .innerJoin('FunctionalityRole as FR', 'R.id', '=', 'FR.roleId')
+      .innerJoin('Functionality as F', 'FR.functionalityId', '=', 'F.id')
+      .innerJoin('Screen as S ', 'F.id', '=', 'S.functionalityId')
+      .where('FR.allowed', '=', true)
+      .andWhere('U.id', '=', userId);
+
+    // this.app.log.info('query', query.toString());
+
+    const data = await query;
+
+    return data;
+  }
 }
 
 module.exports = {

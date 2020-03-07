@@ -16,11 +16,18 @@ class RouteControllor extends Controller {
    * @memberof RouteControllor
    */
   async getAllRoutes ({ attribute, value }) {
-    const routes = await this.getAll({
-      tableName: 'Route',
-      attributeName: attribute,
-      attributeValue: value
-    });
+    const { knex } = this.app;
+
+    let query = knex.select('*')
+      .from('Route');
+
+    if (attribute) {
+      query = query.where({ [attribute]: value });
+    }
+
+    query = query.orderBy('path', 'desc');
+
+    const routes = await query;
 
     return routes;
   }
