@@ -29,7 +29,7 @@ const companyRoutes = async (app, options) => {
       value: userId
     });
 
-    return [company];
+    return company ? [company] : [];
   });
 
   app.patch('/:companyId', { schema: updateSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
