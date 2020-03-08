@@ -3,7 +3,7 @@ const seed = async (knex) => {
     {
       id: 1,
       name: 'Empresas',
-      path: '',
+      path: '/companies',
       relativePath: '',
       functionalityId: 2
     }
