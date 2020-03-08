@@ -73,12 +73,6 @@ const seed = async (knex) => {
       public: false
     },
     {
-      id: 12,
-      httpMethod: 'POST',
-      path: '/api/companies',
-      public: false
-    },
-    {
       id: 13,
       httpMethod: 'GET',
       path: '/api/companies/get-user-companies',

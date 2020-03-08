@@ -648,21 +648,32 @@ class UserController extends Controller {
   async getUserScreens ({ userId }) {
     const { knex } = this.app;
 
-    const query = knex.select('S.*')
+    const functionalityQuery = knex.select('F.*')
       .from('User as U')
       .innerJoin('AssignedRole as AR', 'U.id', '=', 'AR.userId')
       .innerJoin('Role as R', 'AR.roleId', '=', 'R.id')
       .innerJoin('FunctionalityRole as FR', 'R.id', '=', 'FR.roleId')
       .innerJoin('Functionality as F', 'FR.functionalityId', '=', 'F.id')
-      .innerJoin('Screen as S ', 'F.id', '=', 'S.functionalityId')
       .where('FR.allowed', '=', true)
       .andWhere('U.id', '=', userId);
 
-    // this.app.log.info('query', query.toString());
+    const functionalities = await functionalityQuery;
 
-    const data = await query;
+    const funcAndScreens = await Promise.all(functionalities.map(async functionality => {
+      const query = knex.select('S.*')
+        .from('Screen as S')
+        .where('S.functionalityId', '=', functionality.id);
+      const screens = await query;
 
-    return data;
+      if (!screens.length) return;
+
+      return {
+        ...functionality,
+        screens
+      };
+    }));
+
+    return funcAndScreens.filter(item => !!item);
   }
 }
 
