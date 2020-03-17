@@ -89,6 +89,12 @@ const seed = async (knex) => {
       httpMethod: 'GET',
       path: '/api/users/get-user-screens',
       public: true
+    },
+    {
+      id: 16,
+      httpMethod: 'GET',
+      path: '/api/plans',
+      public: true
     }
   ];
 
