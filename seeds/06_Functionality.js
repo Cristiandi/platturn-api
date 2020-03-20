@@ -9,6 +9,11 @@ const seed = async (knex) => {
       id: 2,
       name: 'Gestión de empresas',
       code: '02GE'
+    },
+    {
+      id: 3,
+      name: 'Gestión de funcionalidades',
+      code: '03GF'
     }
   ];
 

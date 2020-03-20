@@ -6,6 +6,13 @@ const seed = async (knex) => {
       path: '/companies',
       relativePath: '',
       functionalityId: 2
+    },
+    {
+      id: 2,
+      name: 'Funcionalidades',
+      path: '/functionalities',
+      relativePath: '',
+      functionalityId: 3
     }
   ];
 

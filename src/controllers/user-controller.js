@@ -117,7 +117,9 @@ class UserController extends Controller {
     // get the accestoken
     const { stsTokenManager: { accessToken } } = firebaseUser;
 
-    return { ...user, accessToken };
+    const roles = await this.getAssignedRoles({ userId: user.id });
+
+    return { ...user, accessToken, roles };
   }
 
   /**
@@ -655,7 +657,8 @@ class UserController extends Controller {
       .innerJoin('FunctionalityRole as FR', 'R.id', '=', 'FR.roleId')
       .innerJoin('Functionality as F', 'FR.functionalityId', '=', 'F.id')
       .where('FR.allowed', '=', true)
-      .andWhere('U.id', '=', userId);
+      .andWhere('U.id', '=', userId)
+      .andWhere('AR.main', '=', 1);
 
     const functionalities = await functionalityQuery;
 

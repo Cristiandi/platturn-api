@@ -24,6 +24,12 @@ const seed = async knex => {
       name: 'Plan anual',
       code: 'PL04',
       numberOfDays: 365
+    },
+    {
+      id: 5,
+      name: 'Plan gratis',
+      code: 'PL05',
+      numberOfDays: 0
     }
   ];
 

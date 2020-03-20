@@ -119,15 +119,6 @@ const loginSchema = {
       password: userProperties.password
     },
     required: ['email', 'password']
-  },
-  response: {
-    200: {
-      type: 'object',
-      properties: {
-        ...userProperties,
-        accessToken: { type: 'string' }
-      }
-    }
   }
 };
 
