@@ -1,5 +1,5 @@
 const { FunctionalityController } = require('../../../controllers/functionality-controller');
-const { getAllSchema } = require('./schemas');
+const { getAllSchema, createSchema } = require('./schemas');
 
 const functionalityRoutes = async (app, options) => {
   const { reqAuthPreHandler } = app;
@@ -11,6 +11,16 @@ const functionalityRoutes = async (app, options) => {
   app.get('/', { schema: getAllSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const functionalities = await functionalityController.getAllFunctionalities();
     return functionalities;
+  });
+
+  app.post('/', { schema: createSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { body } = request;
+
+    const createdFunctionality = await functionalityController.createFunctionality({
+      functionality: body
+    });
+
+    return { ...createdFunctionality, message: 'functionality created!' };
   });
 };
 

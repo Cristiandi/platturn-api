@@ -12,6 +12,15 @@ class FunctionalityController extends Controller {
 
     return functionalities;
   }
+
+  async createFunctionality ({ functionality }) {
+    const createdFunctionaty = await this.createOne({
+      tableName: 'Functionality',
+      objectToCreate: functionality
+    });
+
+    return createdFunctionaty;
+  }
 };
 
 module.exports = {

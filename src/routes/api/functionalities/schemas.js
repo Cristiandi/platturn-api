@@ -4,7 +4,6 @@ const functionalityProperties = {
   id: { type: 'number' },
   name: { type: 'string', maxLength: 45 },
   code: { type: 'string', maxLength: 5 },
-  numberOfDays: { type: 'number' },
   created_at: { type: 'string' },
   updated_at: { type: 'string' }
 };
@@ -30,7 +29,7 @@ const queryStringJsonSchema = {
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: functionalityProperties,
-  required: ['name', 'code', 'numberOfDays']
+  required: ['name', 'code']
 };
 
 const bodyUpdateJsonSchema = {

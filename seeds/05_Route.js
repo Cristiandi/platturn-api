@@ -101,6 +101,12 @@ const seed = async (knex) => {
       httpMethod: 'GET',
       path: '/api/functionalities',
       public: false
+    },
+    {
+      id: 18,
+      httpMethod: 'POST',
+      path: '/api/functionalities',
+      public: false
     }
   ];
 
