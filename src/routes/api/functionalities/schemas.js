@@ -13,9 +13,9 @@ const tags = ['functionalities'];
 const paramsJsonSchema = {
   type: 'object',
   properties: {
-    planId: { type: 'number' }
+    functionalityId: { type: 'number' }
   },
-  required: ['companyId']
+  required: ['functionalityId']
 };
 
 const queryStringJsonSchema = {
