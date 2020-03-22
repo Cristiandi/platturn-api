@@ -113,6 +113,12 @@ const seed = async (knex) => {
       httpMethod: 'POST',
       path: '/api/functionalities/:functionalityId',
       public: false
+    },
+    {
+      id: 20,
+      httpMethod: 'DELETE',
+      path: '/api/functionalities/:functionalityId',
+      public: false
     }
   ];
 

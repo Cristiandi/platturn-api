@@ -46,6 +46,58 @@ class FunctionalityController extends Controller {
 
     return updatedFunctionality;
   }
+
+  async canDeteleFunctionality ({ functionalityId }) {
+    const { knex } = this.app;
+    const { screens } = (await knex('Screen')
+      .count('id', { as: 'screens' })
+      .where({ functionalityId }))[0];
+
+    const { functionalityRoles } = (await knex('FunctionalityRole')
+      .count('id', { as: 'functionalityRoles' })
+      .where({ functionalityId }))[0];
+
+    const { functionalityRoutes } = (await knex('FunctionalityRoute')
+      .count('id', { as: 'functionalityRoutes' })
+      .where({ functionalityId }))[0];
+
+    if (screens > 0) {
+      return {
+        can: false,
+        message: 'functionality has screens'
+      };
+    } else if (functionalityRoles > 0) {
+      return {
+        can: false,
+        message: 'functionality has functionality-roles'
+      };
+    } else if (functionalityRoutes > 0) {
+      return {
+        can: false,
+        message: 'functionality has functionality-routes'
+      };
+    }
+
+    return {
+      can: true,
+      message: null
+    };
+  }
+
+  async deleteFunctionality ({ functionalityId }) {
+    const result = await this.canDeteleFunctionality({ functionalityId });
+
+    if (!result.can) {
+      throw throwError(result.message, 412);
+    }
+
+    const deletedFunctionality = await this.deleteOne({
+      tableName: 'Functionality',
+      id: functionalityId
+    });
+
+    return deletedFunctionality;
+  }
 };
 
 module.exports = {

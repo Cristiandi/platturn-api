@@ -103,13 +103,7 @@ const deleteSchema = {
   params: paramsJsonSchema,
   security: [
     { Bearer: [] }
-  ],
-  response: {
-    200: {
-      type: 'object',
-      properties: functionalityProperties
-    }
-  }
+  ]
 };
 
 module.exports = {

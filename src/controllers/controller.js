@@ -130,6 +130,25 @@ class Controller {
 
     return rowAfter;
   }
+
+  async deleteOne ({ tableName, id }) {
+    const rowBefore = await this.getOne({
+      tableName,
+      attributeName: 'id',
+      attributeValue: id
+    });
+
+    if (!rowBefore) {
+      throw throwError(`can't get the ${tableName} ${id}.`, 412);
+    }
+
+    const { knex } = this.app;
+    await knex(tableName)
+      .where({ id })
+      .delete();
+
+    return rowBefore;
+  }
 }
 
 module.exports = {

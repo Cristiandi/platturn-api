@@ -2,7 +2,8 @@ const { FunctionalityController } = require('../../../controllers/functionality-
 const {
   getAllSchema,
   createSchema,
-  updateSchema
+  updateSchema,
+  deleteSchema
 } = require('./schemas');
 
 const functionalityRoutes = async (app, options) => {
@@ -30,13 +31,17 @@ const functionalityRoutes = async (app, options) => {
   app.patch('/:functionalityId', { schema: updateSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const { params: { functionalityId }, body } = request;
 
-    app.log.info('----------------');
-    app.log.info('body', body);
-    app.log.info('----------------');
-
     const updated = await functionalityController.updateFunctionality({ functionalityId, functionality: body });
 
     return { ...updated, message: 'functionality updated!' };
+  });
+
+  app.delete('/:functionalityId', { schema: deleteSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { params: { functionalityId } } = request;
+
+    const deleted = await functionalityController.deleteFunctionality({ functionalityId });
+
+    return { ...deleted, message: 'functionality deleted.' };
   });
 };
 
