@@ -55,9 +55,12 @@ class RouteControllor extends Controller {
       .andWhere('FR.allowed', '=', true)
       .andWhere('R2.id', '=', routeId);
 
+    // this.app.log.info('query', query.toString());
     const data = await query;
 
-    this.app.log.info('data', data);
+    // this.app.log.info('roleIds', roleIds);
+    // this.app.log.info('routeId', routeId);
+    // this.app.log.info('data', data);
 
     return data.length > 0;
   }

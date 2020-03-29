@@ -119,6 +119,30 @@ const seed = async (knex) => {
       httpMethod: 'DELETE',
       path: '/api/functionalities/:functionalityId',
       public: false
+    },
+    {
+      id: 21,
+      httpMethod: 'GET',
+      path: '/api/screens',
+      public: false
+    },
+    {
+      id: 22,
+      httpMethod: 'POST',
+      path: '/api/screens',
+      public: false
+    },
+    {
+      id: 23,
+      httpMethod: 'PATCH',
+      path: '/api/screens/:screenId',
+      public: false
+    },
+    {
+      id: 24,
+      httpMethod: 'DELETE',
+      path: '/api/screens/:screenId',
+      public: false
     }
   ];
 
