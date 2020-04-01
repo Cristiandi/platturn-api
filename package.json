@@ -42,7 +42,7 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.2",
     "path-to-regexp": "^6.1.0",
-    "pino-pretty": "^3.5.0",
+    "pino-pretty": "^4.0.0",
     "uid-safe": "^2.1.5"
   },
   "devDependencies": {
