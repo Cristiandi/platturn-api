@@ -8,6 +8,7 @@ const apiRoutes = async (app, options) => {
   app.register(require('./plans'), { prefix: 'plans' });
   app.register(require('./functionalities'), { prefix: 'functionalities' });
   app.register(require('./screens'), { prefix: 'screens' });
+  app.register(require('./routes'), { prefix: 'routes' });
   app.get('/', { schema: { hide: true } }, async (request, reply) => {
     return { hello: 'world' };
   });

@@ -4,145 +4,151 @@ const seed = async (knex) => {
       id: 1,
       httpMethod: 'POST',
       path: '/api/users',
-      public: true
+      isPublic: true
     },
     {
       id: 2,
       httpMethod: 'GET',
       path: '/api/users/:userId',
-      public: false
+      isPublic: false
     },
     {
       id: 3,
       httpMethod: 'POST',
       path: '/api/users/login',
-      public: true
+      isPublic: true
     },
     {
       id: 4,
       httpMethod: 'POST',
       path: '/api/users/send-confimation-email/:code',
-      public: true
+      isPublic: true
     },
     {
       id: 5,
       httpMethod: 'POST',
       path: '/api/users/send-forgot-password-email',
-      public: true
+      isPublic: true
     },
     {
       id: 6,
       httpMethod: 'POST',
       path: '/api/users/change-password-from-code',
-      public: true
+      isPublic: true
     },
     {
       id: 7,
       httpMethod: 'POST',
       path: '/api/users/change-password',
-      public: false
+      isPublic: false
     },
     {
       id: 8,
       httpMethod: 'POST',
       path: '/api/users/change-email-address',
-      public: false
+      isPublic: false
     },
     {
       id: 9,
       httpMethod: 'PATCH',
       path: '/api/users/update-user-data',
-      public: false
+      isPublic: false
     },
     {
       id: 10,
       httpMethod: 'GET',
       path: '/api/users/validate-token',
-      public: true
+      isPublic: true
     },
     {
       id: 11,
       httpMethod: 'POST',
       path: '/api/potential-leads',
-      public: true
+      isPublic: true
     },
     {
       id: 12,
       httpMethod: 'POST',
       path: '/api/companies',
-      public: false
+      isPublic: false
     },
     {
       id: 13,
       httpMethod: 'GET',
       path: '/api/companies/get-user-companies',
-      public: false
+      isPublic: false
     },
     {
       id: 14,
       httpMethod: 'PATCH',
       path: '/api/companies/:companyId',
-      public: false
+      isPublic: false
     },
     {
       id: 15,
       httpMethod: 'GET',
       path: '/api/users/get-user-screens',
-      public: true
+      isPublic: true
     },
     {
       id: 16,
       httpMethod: 'GET',
       path: '/api/plans',
-      public: true
+      isPublic: true
     },
     {
       id: 17,
       httpMethod: 'GET',
       path: '/api/functionalities',
-      public: false
+      isPublic: false
     },
     {
       id: 18,
       httpMethod: 'POST',
       path: '/api/functionalities',
-      public: false
+      isPublic: false
     },
     {
       id: 19,
       httpMethod: 'POST',
       path: '/api/functionalities/:functionalityId',
-      public: false
+      isPublic: false
     },
     {
       id: 20,
       httpMethod: 'DELETE',
       path: '/api/functionalities/:functionalityId',
-      public: false
+      isPublic: false
     },
     {
       id: 21,
       httpMethod: 'GET',
       path: '/api/screens',
-      public: false
+      isPublic: false
     },
     {
       id: 22,
       httpMethod: 'POST',
       path: '/api/screens',
-      public: false
+      isPublic: false
     },
     {
       id: 23,
       httpMethod: 'PATCH',
       path: '/api/screens/:screenId',
-      public: false
+      isPublic: false
     },
     {
       id: 24,
       httpMethod: 'DELETE',
       path: '/api/screens/:screenId',
-      public: false
+      isPublic: false
+    },
+    {
+      id: 25,
+      httpMethod: 'GET',
+      path: '/api/routes',
+      isPublic: false
     }
   ];
 

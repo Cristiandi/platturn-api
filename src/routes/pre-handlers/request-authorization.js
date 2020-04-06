@@ -80,7 +80,7 @@ const canTheUserHaveThis = async (app, userId, url) => {
   if (!requestedRoute) {
     throw throwError(`can't get the requested route.`, 412);
   }
-  if (requestedRoute.public) return true;
+  if (requestedRoute.isPublic) return true;
 
   // determine if can access to the route
   const canAccessToRoute = await routeController.canAccessToRoute({
