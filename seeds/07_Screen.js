@@ -14,30 +14,30 @@ const seed = async (knex) => {
       relativePath: '',
       functionalityId: 3
     }
-  ];
+  ]
 
   const promises = screens.map(async screen => {
     const rows = await knex('Screen').select('id')
-      .where('id', screen.id);
+      .where('id', screen.id)
 
     if (rows.length === 0) {
-      const id = (await knex('Screen').insert(screen))[0];
-      return { id };
+      const id = (await knex('Screen').insert(screen))[0]
+      return { id }
     } else {
       await knex('Screen')
         .update({ ...screen })
         .where({
           id: rows[0].id
-        });
+        })
     }
-    return { ...rows[0].id };
-  });
+    return { ...rows[0].id }
+  })
 
   for (const promise of promises) {
-    await promise;
+    await promise
   }
-};
+}
 
 module.exports = {
   seed
-};
+}

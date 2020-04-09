@@ -7,9 +7,9 @@ const planProperties = {
   numberOfDays: { type: 'number' },
   created_at: { type: 'string' },
   updated_at: { type: 'string' }
-};
+}
 
-const tags = ['plans'];
+const tags = ['plans']
 
 const paramsJsonSchema = {
   type: 'object',
@@ -17,7 +17,7 @@ const paramsJsonSchema = {
     planId: { type: 'number' }
   },
   required: ['companyId']
-};
+}
 
 const queryStringJsonSchema = {
   type: 'object',
@@ -25,18 +25,18 @@ const queryStringJsonSchema = {
     filter: { type: 'string' }
   },
   required: ['filter']
-};
+}
 
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: planProperties,
   required: ['name', 'code', 'numberOfDays']
-};
+}
 
 const bodyUpdateJsonSchema = {
   type: 'object',
   properties: planProperties
-};
+}
 
 const createSchema = {
   tags,
@@ -50,7 +50,7 @@ const createSchema = {
       properties: planProperties
     }
   }
-};
+}
 
 const getAllSchema = {
   tags,
@@ -67,7 +67,7 @@ const getAllSchema = {
       }
     }
   }
-};
+}
 
 const getOneSchema = {
   tags,
@@ -82,7 +82,7 @@ const getOneSchema = {
       properties: planProperties
     }
   }
-};
+}
 
 const updateSchema = {
   tags,
@@ -97,7 +97,7 @@ const updateSchema = {
       properties: planProperties
     }
   }
-};
+}
 
 const deleteSchema = {
   tags,
@@ -111,7 +111,7 @@ const deleteSchema = {
       properties: planProperties
     }
   }
-};
+}
 
 module.exports = {
   getAllSchema,
@@ -119,4 +119,4 @@ module.exports = {
   createSchema,
   updateSchema,
   deleteSchema
-};
+}

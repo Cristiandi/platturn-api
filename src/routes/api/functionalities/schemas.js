@@ -6,9 +6,9 @@ const functionalityProperties = {
   code: { type: 'string', maxLength: 5 },
   created_at: { type: 'string' },
   updated_at: { type: 'string' }
-};
+}
 
-const tags = ['functionalities'];
+const tags = ['functionalities']
 
 const paramsJsonSchema = {
   type: 'object',
@@ -16,7 +16,7 @@ const paramsJsonSchema = {
     functionalityId: { type: 'number' }
   },
   required: ['functionalityId']
-};
+}
 
 const queryStringJsonSchema = {
   type: 'object',
@@ -24,18 +24,18 @@ const queryStringJsonSchema = {
     filter: { type: 'string' }
   },
   required: ['filter']
-};
+}
 
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: functionalityProperties,
   required: ['name', 'code']
-};
+}
 
 const bodyUpdateJsonSchema = {
   type: 'object',
   properties: functionalityProperties
-};
+}
 
 const createSchema = {
   tags,
@@ -49,7 +49,7 @@ const createSchema = {
       properties: functionalityProperties
     }
   }
-};
+}
 
 const getAllSchema = {
   tags,
@@ -66,7 +66,7 @@ const getAllSchema = {
       }
     }
   }
-};
+}
 
 const getOneSchema = {
   tags,
@@ -81,7 +81,7 @@ const getOneSchema = {
       properties: functionalityProperties
     }
   }
-};
+}
 
 const updateSchema = {
   tags,
@@ -96,7 +96,7 @@ const updateSchema = {
       properties: functionalityProperties
     }
   }
-};
+}
 
 const deleteSchema = {
   tags,
@@ -104,7 +104,7 @@ const deleteSchema = {
   security: [
     { Bearer: [] }
   ]
-};
+}
 
 module.exports = {
   getAllSchema,
@@ -112,4 +112,4 @@ module.exports = {
   createSchema,
   updateSchema,
   deleteSchema
-};
+}

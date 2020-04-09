@@ -8,9 +8,9 @@ const screenProperties = {
   functionalityId: { type: 'number' },
   created_at: { type: 'string' },
   updated_at: { type: 'string' }
-};
+}
 
-const tags = ['screens'];
+const tags = ['screens']
 
 const paramsJsonSchema = {
   type: 'object',
@@ -18,7 +18,7 @@ const paramsJsonSchema = {
     screenId: { type: 'number' }
   },
   required: ['screenId']
-};
+}
 
 const queryStringJsonSchema = {
   type: 'object',
@@ -26,18 +26,18 @@ const queryStringJsonSchema = {
     filter: { type: 'string' }
   },
   required: ['filter']
-};
+}
 
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: screenProperties,
   required: ['name', 'path', 'functionalityId']
-};
+}
 
 const bodyUpdateJsonSchema = {
   type: 'object',
   properties: screenProperties
-};
+}
 
 const createSchema = {
   tags,
@@ -51,7 +51,7 @@ const createSchema = {
       properties: screenProperties
     }
   }
-};
+}
 
 const getAllSchema = {
   tags,
@@ -71,7 +71,7 @@ const getAllSchema = {
       }
     }
   }
-};
+}
 
 const getOneSchema = {
   tags,
@@ -86,7 +86,7 @@ const getOneSchema = {
       properties: screenProperties
     }
   }
-};
+}
 
 const updateSchema = {
   tags,
@@ -101,7 +101,7 @@ const updateSchema = {
       properties: screenProperties
     }
   }
-};
+}
 
 const deleteSchema = {
   tags,
@@ -109,7 +109,7 @@ const deleteSchema = {
   security: [
     { Bearer: [] }
   ]
-};
+}
 
 module.exports = {
   getAllSchema,
@@ -117,4 +117,4 @@ module.exports = {
   createSchema,
   updateSchema,
   deleteSchema
-};
+}

@@ -150,30 +150,30 @@ const seed = async (knex) => {
       path: '/api/routes',
       isPublic: false
     }
-  ];
+  ]
 
   const promises = routes.map(async route => {
     const rows = await knex('Route').select('id')
-      .where('id', route.id);
+      .where('id', route.id)
 
     if (rows.length === 0) {
-      const id = (await knex('Route').insert(route))[0];
-      return { id };
+      const id = (await knex('Route').insert(route))[0]
+      return { id }
     } else {
       await knex('Route')
         .update({ ...route })
         .where({
           id: rows[0].id
-        });
+        })
     }
-    return { ...rows[0].id };
-  });
+    return { ...rows[0].id }
+  })
 
   for (const promise of promises) {
-    await promise;
+    await promise
   }
-};
+}
 
 module.exports = {
   seed
-};
+}

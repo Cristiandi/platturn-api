@@ -1,6 +1,6 @@
-const firebaseAdmin = require('firebase-admin');
+const firebaseAdmin = require('firebase-admin')
 
-const serviceAccount = require(`./credentials/serviceAccountKey.js`);
+const serviceAccount = require('./credentials/serviceAccountKey.js')
 
 class FirebaseAdminService {
   constructor () {
@@ -8,7 +8,7 @@ class FirebaseAdminService {
 
     // if (!fs.existsSync(serviceAccountPath)) throw new Error(`can't get ${serviceAccountPath}`);
 
-    this.admin = firebaseAdmin.initializeApp({ credential: firebaseAdmin.credential.cert(serviceAccount) });
+    this.admin = firebaseAdmin.initializeApp({ credential: firebaseAdmin.credential.cert(serviceAccount) })
   }
 
   /**
@@ -31,12 +31,12 @@ class FirebaseAdminService {
       email,
       password,
       phoneNumber: `+57${phone}`
-    };
+    }
 
-    let userRecord = await this.admin.auth().createUser(objectToCreate);
-    userRecord = userRecord.toJSON();
+    let userRecord = await this.admin.auth().createUser(objectToCreate)
+    userRecord = userRecord.toJSON()
 
-    return userRecord;
+    return userRecord
   }
 
   /**
@@ -56,9 +56,9 @@ class FirebaseAdminService {
    * @memberof FirebaseAdminService
    */
   async verifyToken (token) {
-    const userFirebase = await this.admin.auth().verifyIdToken(token);
+    const userFirebase = await this.admin.auth().verifyIdToken(token)
 
-    return userFirebase;
+    return userFirebase
   }
 
   /**
@@ -69,14 +69,14 @@ class FirebaseAdminService {
    * @memberof FirebaseAdminService
    */
   async getUserByUid ({ uid }) {
-    let firebaseUser;
+    let firebaseUser
     try {
-      firebaseUser = await this.admin.auth().getUser(uid);
+      firebaseUser = await this.admin.auth().getUser(uid)
     } catch (error) {
-      return undefined;
+      return undefined
     }
 
-    return firebaseUser.toJSON();
+    return firebaseUser.toJSON()
   }
 
   /**
@@ -88,9 +88,9 @@ class FirebaseAdminService {
    */
   async updateUser ({ uid, attributes }) {
     // Actualizo el usuario
-    const firebaseUpdatedUser = await this.admin.auth().updateUser(uid, attributes);
+    const firebaseUpdatedUser = await this.admin.auth().updateUser(uid, attributes)
 
-    return firebaseUpdatedUser.toJSON();
+    return firebaseUpdatedUser.toJSON()
   }
 
   /**
@@ -99,12 +99,12 @@ class FirebaseAdminService {
    * @memberof FirebaseAdmin
    */
   async deleteApp () {
-    await this.admin.delete();
+    await this.admin.delete()
   }
 }
 
-const firebaseAdminService = new FirebaseAdminService();
+const firebaseAdminService = new FirebaseAdminService()
 
 module.exports = {
   firebaseAdminService
-};
+}

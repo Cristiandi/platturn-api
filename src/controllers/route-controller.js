@@ -1,8 +1,8 @@
-const { Controller } = require('./controller');
+const { Controller } = require('./controller')
 
 class RouteControllor extends Controller {
   constructor ({ app }) {
-    super({ app });
+    super({ app })
   }
 
   /**
@@ -16,20 +16,20 @@ class RouteControllor extends Controller {
    * @memberof RouteControllor
    */
   async getAllRoutes ({ attribute, value }) {
-    const { knex } = this.app;
+    const { knex } = this.app
 
     let query = knex.select('*')
-      .from('Route');
+      .from('Route')
 
     if (attribute) {
-      query = query.where({ [attribute]: value });
+      query = query.where({ [attribute]: value })
     }
 
-    query = query.orderBy('path', 'desc');
+    query = query.orderBy('path', 'desc')
 
-    const routes = await query;
+    const routes = await query
 
-    return routes;
+    return routes
   }
 
   /**
@@ -43,7 +43,7 @@ class RouteControllor extends Controller {
    * @memberof RouteControllor
    */
   async canAccessToRoute ({ routeId, roleIds = [] }) {
-    const { knex } = this.app;
+    const { knex } = this.app
 
     const query = knex.select('R2.id')
       .from('Role as R')
@@ -53,19 +53,19 @@ class RouteControllor extends Controller {
       .innerJoin('Route as R2', 'FR2.routeId', '=', 'R2.id')
       .whereIn('R.id', roleIds)
       .andWhere('FR.allowed', '=', true)
-      .andWhere('R2.id', '=', routeId);
+      .andWhere('R2.id', '=', routeId)
 
     // this.app.log.info('query', query.toString());
-    const data = await query;
+    const data = await query
 
     // this.app.log.info('roleIds', roleIds);
     // this.app.log.info('routeId', routeId);
     // this.app.log.info('data', data);
 
-    return data.length > 0;
+    return data.length > 0
   }
 };
 
 module.exports = {
   RouteControllor
-};
+}

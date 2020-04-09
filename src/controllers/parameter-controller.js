@@ -1,9 +1,9 @@
-const { Controller } = require('./controller');
-const { throwError } = require('../utils/functions');
+const { Controller } = require('./controller')
+const { throwError } = require('../utils/functions')
 
 class ParameterController extends Controller {
   constructor ({ app }) {
-    super({ app });
+    super({ app })
   }
 
   /**
@@ -18,19 +18,19 @@ class ParameterController extends Controller {
       tableName: 'Parameter',
       attributeName: 'name',
       attributeValue: name
-    });
+    })
 
     if (!parameter) {
       throw throwError(
         message || `can't get parameter with name ${name}.`,
         statusCode
-      );
+      )
     }
 
-    return parameter.value;
+    return parameter.value
   }
 }
 
 module.exports = {
   ParameterController
-};
+}

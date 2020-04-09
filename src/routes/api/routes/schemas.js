@@ -7,9 +7,9 @@ const routeProperties = {
   isPublic: { type: 'boolean' },
   created_at: { type: 'string' },
   updated_at: { type: 'string' }
-};
+}
 
-const tags = ['routes'];
+const tags = ['routes']
 
 const paramsJsonSchema = {
   type: 'object',
@@ -17,7 +17,7 @@ const paramsJsonSchema = {
     routeId: { type: 'number' }
   },
   required: ['routeId']
-};
+}
 
 const queryStringJsonSchema = {
   type: 'object',
@@ -25,18 +25,18 @@ const queryStringJsonSchema = {
     filter: { type: 'string' }
   },
   required: ['filter']
-};
+}
 
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: routeProperties,
   required: ['httpMethod', 'path']
-};
+}
 
 const bodyUpdateJsonSchema = {
   type: 'object',
   properties: routeProperties
-};
+}
 
 const createSchema = {
   tags,
@@ -50,7 +50,7 @@ const createSchema = {
       properties: routeProperties
     }
   }
-};
+}
 
 const getAllSchema = {
   tags,
@@ -67,7 +67,7 @@ const getAllSchema = {
       }
     }
   }
-};
+}
 
 const getOneSchema = {
   tags,
@@ -82,7 +82,7 @@ const getOneSchema = {
       properties: routeProperties
     }
   }
-};
+}
 
 const updateSchema = {
   tags,
@@ -97,7 +97,7 @@ const updateSchema = {
       properties: routeProperties
     }
   }
-};
+}
 
 const deleteSchema = {
   tags,
@@ -111,7 +111,7 @@ const deleteSchema = {
       properties: routeProperties
     }
   }
-};
+}
 
 module.exports = {
   createSchema,
@@ -119,4 +119,4 @@ module.exports = {
   getOneSchema,
   updateSchema,
   deleteSchema
-};
+}

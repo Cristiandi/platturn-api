@@ -1,4 +1,4 @@
-const environment = require('../src/environment');
+const environment = require('../src/environment')
 
 const seed = async (knex) => {
   const parameters = [
@@ -56,13 +56,13 @@ const seed = async (knex) => {
       value: 'Has cambiado tú dirección correo electronico!',
       description: 'password changed alert subject'
     }
-  ];
+  ]
 
   const promises = parameters.map(async parameter => {
-    const rows = await knex('Parameter').select('id').where('name', parameter.name);
+    const rows = await knex('Parameter').select('id').where('name', parameter.name)
     if (rows.length === 0) {
-      const id = (await knex('Parameter').insert(parameter))[0];
-      return { id };
+      const id = (await knex('Parameter').insert(parameter))[0]
+      return { id }
     } else {
       await knex('Parameter')
         .update({
@@ -70,14 +70,14 @@ const seed = async (knex) => {
         })
         .where({
           name: parameter.name
-        });
+        })
     }
-    return { ...rows[0] };
-  });
+    return { ...rows[0] }
+  })
 
-  await Promise.all(promises);
-};
+  await Promise.all(promises)
+}
 
 module.exports = {
   seed
-};
+}

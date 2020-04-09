@@ -1,13 +1,13 @@
-const joi = require('@hapi/joi');
-const uid = require('uid-safe');
-const moment = require('moment');
+const joi = require('@hapi/joi')
+const uid = require('uid-safe')
+const moment = require('moment')
 
-const { Controller } = require('./controller');
-const { throwError } = require('../utils/functions');
+const { Controller } = require('./controller')
+const { throwError } = require('../utils/functions')
 
 class VerificationCodeController extends Controller {
   constructor ({ app }) {
-    super({ app });
+    super({ app })
   }
 
   /**
@@ -22,17 +22,17 @@ class VerificationCodeController extends Controller {
       userId: joi.number().required(),
       type: joi.string().uppercase().required(),
       expirationDate: joi.date().greater('now')
-    });
+    })
 
-    await schema.validateAsync(verificationCodeObj);
+    await schema.validateAsync(verificationCodeObj)
 
-    const objectToCreate = { code: uid.sync(5), ...verificationCodeObj };
+    const objectToCreate = { code: uid.sync(5), ...verificationCodeObj }
 
-    this.app.log.warn('date', objectToCreate.expirationDate);
+    this.app.log.warn('date', objectToCreate.expirationDate)
 
-    const created = this.createOne({ tableName: 'VerificationCode', objectToCreate });
+    const created = this.createOne({ tableName: 'VerificationCode', objectToCreate })
 
-    return created;
+    return created
   }
 
   /**
@@ -44,16 +44,16 @@ class VerificationCodeController extends Controller {
    */
   async getOneVerificationCode ({ attribute, value }) {
     if (!attribute || !value) {
-      throw throwError(`attribute and value are needed`, 400);
+      throw throwError('attribute and value are needed', 400)
     }
 
     const verificationCode = await this.getOne({
       tableName: 'VerificationCode',
       attributeName: attribute,
       attributeValue: value
-    });
+    })
 
-    return verificationCode;
+    return verificationCode
   }
 
   /**
@@ -64,24 +64,24 @@ class VerificationCodeController extends Controller {
    * @memberof VerificationCodeController
    */
   async validCode ({ code, type }) {
-    const verificationCode = await this.getOneVerificationCode({ attribute: 'code', value: code });
+    const verificationCode = await this.getOneVerificationCode({ attribute: 'code', value: code })
     if (!verificationCode) {
-      throw throwError(`can't the verificarion code`, 412);
+      throw throwError('can\'t the verificarion code', 412)
     }
 
     if (type !== verificationCode.type) {
-      throw throwError(`the type ${type} doesn't match with the code.`, 412);
+      throw throwError(`the type ${type} doesn't match with the code.`, 412)
     }
 
-    const { expirationDate } = verificationCode;
+    const { expirationDate } = verificationCode
 
-    const momentFromExpDate = moment(expirationDate).utc();
-    const currentDate = moment().utc();
+    const momentFromExpDate = moment(expirationDate).utc()
+    const currentDate = moment().utc()
 
-    return momentFromExpDate.isAfter(currentDate);
+    return momentFromExpDate.isAfter(currentDate)
   }
 }
 
 module.exports = {
   VerificationCodeController
-};
+}

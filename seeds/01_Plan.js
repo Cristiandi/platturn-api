@@ -31,25 +31,25 @@ const seed = async knex => {
       code: 'PL05',
       numberOfDays: 0
     }
-  ];
+  ]
 
   const promises = plans.map(async plan => {
-    const rows = await knex('Plan').select('id').where('code', plan.code);
+    const rows = await knex('Plan').select('id').where('code', plan.code)
     if (!rows.length) {
-      const [id] = await knex('Plan').insert(plan);
-      return { id };
+      const [id] = await knex('Plan').insert(plan)
+      return { id }
     } else {
       await knex('Plan')
         .update({ ...plan })
         .where({
           code: plan.code
-        });
+        })
     }
-  });
+  })
 
-  await Promise.all(promises);
-};
+  await Promise.all(promises)
+}
 
 module.exports = {
   seed
-};
+}

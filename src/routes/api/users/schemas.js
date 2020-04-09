@@ -10,9 +10,9 @@ const userProperties = {
   phone: { type: 'number', maximum: 9999999999 },
   created_at: { type: 'string' },
   updated_at: { type: 'string' }
-};
+}
 
-const tags = ['users'];
+const tags = ['users']
 
 const paramsJsonSchema = {
   type: 'object',
@@ -20,7 +20,7 @@ const paramsJsonSchema = {
     userId: { type: 'number' }
   },
   required: ['userId']
-};
+}
 
 const queryStringJsonSchema = {
   type: 'object',
@@ -28,18 +28,18 @@ const queryStringJsonSchema = {
     filter: { type: 'string' }
   },
   required: ['filter']
-};
+}
 
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: userProperties,
   required: ['fullName', 'document', 'email', 'password', 'address', 'phone']
-};
+}
 
 const bodyUpdateJsonSchema = {
   type: 'object',
   properties: userProperties
-};
+}
 
 const getAllSchema = {
   tags,
@@ -53,7 +53,7 @@ const getAllSchema = {
       }
     }
   }
-};
+}
 
 const getOneSchema = {
   tags,
@@ -68,7 +68,7 @@ const getOneSchema = {
       properties: userProperties
     }
   }
-};
+}
 
 const createSchema = {
   tags,
@@ -85,7 +85,7 @@ const createSchema = {
       }
     }
   }
-};
+}
 
 const updateSchema = {
   tags,
@@ -97,7 +97,7 @@ const updateSchema = {
       properties: userProperties
     }
   }
-};
+}
 
 const deleteSchema = {
   tags,
@@ -108,7 +108,7 @@ const deleteSchema = {
       properties: userProperties
     }
   }
-};
+}
 
 const loginSchema = {
   tags,
@@ -120,7 +120,7 @@ const loginSchema = {
     },
     required: ['email', 'password']
   }
-};
+}
 
 const sendConfirmationEmailSchema = {
   tags,
@@ -131,7 +131,7 @@ const sendConfirmationEmailSchema = {
     },
     required: ['authUid']
   }
-};
+}
 
 const confirmEmailAddressSchema = {
   tags,
@@ -142,7 +142,7 @@ const confirmEmailAddressSchema = {
     },
     required: ['code']
   }
-};
+}
 
 const sendForgotPasswordEmailSchema = {
   tags,
@@ -153,7 +153,7 @@ const sendForgotPasswordEmailSchema = {
     },
     required: ['email']
   }
-};
+}
 
 const changePasswordFromCodeSchema = {
   tags,
@@ -166,7 +166,7 @@ const changePasswordFromCodeSchema = {
     },
     required: ['code', 'password', 'repeatedPassword']
   }
-};
+}
 
 const changePasswordSchema = {
   tags,
@@ -191,7 +191,7 @@ const changePasswordSchema = {
       }
     }
   }
-};
+}
 
 const changeEmailAddressSchema = {
   tags,
@@ -206,7 +206,7 @@ const changeEmailAddressSchema = {
   security: [
     { Bearer: [] }
   ]
-};
+}
 
 const updateUserDataSchema = {
   tags,
@@ -231,13 +231,13 @@ const updateUserDataSchema = {
       }
     }
   }
-};
+}
 
 const getUserScreensSchema = {
   security: [
     { Bearer: [] }
   ]
-};
+}
 
 module.exports = {
   getAllSchema,
@@ -254,4 +254,4 @@ module.exports = {
   changeEmailAddressSchema,
   updateUserDataSchema,
   getUserScreensSchema
-};
+}

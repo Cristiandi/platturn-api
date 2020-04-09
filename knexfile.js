@@ -5,7 +5,7 @@ const {
   DB_SQL_PASSWORD,
   DB_SQL_NAME,
   DB_SQL_PORT
-} = require('./src/environment');
+} = require('./src/environment')
 // Update with your config settings.
 
 const config = {
@@ -24,7 +24,7 @@ const config = {
   migrations: {
     tableName: 'knex_migrations'
   }
-};
+}
 
 module.exports = {
   local: { ...config },
@@ -35,4 +35,4 @@ module.exports = {
 
   production: { ...config }
 
-};
+}

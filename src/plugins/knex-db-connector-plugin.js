@@ -1,5 +1,5 @@
-const fastifyPlugin = require('fastify-plugin');
-const knex = require('knex');
+const fastifyPlugin = require('fastify-plugin')
+const knex = require('knex')
 
 const {
   DB_SQL_CLIENT,
@@ -8,7 +8,7 @@ const {
   DB_SQL_PASSWORD,
   DB_SQL_NAME,
   DB_SQL_PORT
-} = require('../environment');
+} = require('../environment')
 
 const knexConnector = async (server, options = {}) => {
   const db = knex({
@@ -22,10 +22,10 @@ const knexConnector = async (server, options = {}) => {
       ...options.connection
     },
     ...options
-  });
-  server.decorate('knex', db);
-};
+  })
+  server.decorate('knex', db)
+}
 
 // Wrapping a plugin function with fastify-plugin exposes the decorators,
 // hooks, and middlewares declared inside the plugin to the parent scope.
-module.exports = fastifyPlugin(knexConnector);
+module.exports = fastifyPlugin(knexConnector)

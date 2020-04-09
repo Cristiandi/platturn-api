@@ -1,9 +1,9 @@
-const fastifyPlugin = require('fastify-plugin');
+const fastifyPlugin = require('fastify-plugin')
 
 const requestAuthorizationPlugin = async (app, options = {}) => {
-  const requestAuthorization = require('../routes/pre-handlers/request-authorization').requestAuthorization(app);
+  const requestAuthorization = require('../routes/pre-handlers/request-authorization').requestAuthorization(app)
 
-  app.decorate('reqAuthPreHandler', requestAuthorization);
-};
+  app.decorate('reqAuthPreHandler', requestAuthorization)
+}
 
-module.exports = fastifyPlugin(requestAuthorizationPlugin);
+module.exports = fastifyPlugin(requestAuthorizationPlugin)

@@ -15,30 +15,30 @@ const seed = async (knex) => {
       name: 'Gestión de funcionalidades',
       code: '03GF'
     }
-  ];
+  ]
 
   const promises = functionalities.map(async functionality => {
     const rows = await knex('Functionality').select('id')
-      .where('id', functionality.id);
+      .where('id', functionality.id)
 
     if (rows.length === 0) {
-      const id = (await knex('Functionality').insert(functionality))[0];
-      return { id };
+      const id = (await knex('Functionality').insert(functionality))[0]
+      return { id }
     } else {
       await knex('Functionality')
         .update({ ...functionality })
         .where({
           id: rows[0].id
-        });
+        })
     }
-    return { ...rows[0].id };
-  });
+    return { ...rows[0].id }
+  })
 
   for (const promise of promises) {
-    await promise;
+    await promise
   }
-};
+}
 
 module.exports = {
   seed
-};
+}

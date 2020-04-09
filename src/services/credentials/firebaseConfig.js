@@ -1,4 +1,4 @@
-const environment = require('../../environment');
+const environment = require('../../environment')
 
 module.exports = {
   apiKey: environment.FIREBASE_API_KEY,
@@ -9,4 +9,4 @@ module.exports = {
   messagingSenderId: environment.FIREBASE_MESSAGING_SENDER_ID,
   appId: environment.FIREBASE_APP_ID,
   measurementId: environment.FIREBASE_MEASUREMENT_ID
-};
+}

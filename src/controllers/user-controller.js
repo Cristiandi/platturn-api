@@ -1,9 +1,9 @@
-const moment = require('moment');
+const moment = require('moment')
 
-const { Controller } = require('./controller');
-const { throwError, generateHtmlByTemplate, isEmptyObject } = require('../utils/functions');
-const { VerificationCodeController } = require('../controllers/verification-code-controller');
-const { ParameterController } = require('./parameter-controller');
+const { Controller } = require('./controller')
+const { throwError, generateHtmlByTemplate, isEmptyObject } = require('../utils/functions')
+const { VerificationCodeController } = require('../controllers/verification-code-controller')
+const { ParameterController } = require('./parameter-controller')
 
 class UserController extends Controller {
   /**
@@ -12,17 +12,17 @@ class UserController extends Controller {
    * @memberof UserController
    */
   constructor ({ app }) {
-    super({ app });
+    super({ app })
 
-    const { firebaseAdminService, firebaseService, mailerService } = this.app;
+    const { firebaseAdminService, firebaseService, mailerService } = this.app
     if (!firebaseAdminService) {
-      throw new Error('cant get .firebaseAdminService from fastify app.');
+      throw new Error('cant get .firebaseAdminService from fastify app.')
     }
     if (!firebaseService) {
-      throw new Error('cant get .firebaseService from fastify app.');
+      throw new Error('cant get .firebaseService from fastify app.')
     }
     if (!mailerService) {
-      throw new Error('cant get .mailerService from fastify app.');
+      throw new Error('cant get .mailerService from fastify app.')
     }
   }
 
@@ -34,13 +34,13 @@ class UserController extends Controller {
    * @memberof UserController
    */
   async createUser ({ user }) {
-    this.app.log.info('user', user);
-    const { email, password, phone, fullName, address, document } = user;
+    this.app.log.info('user', user)
+    const { email, password, phone, fullName, address, document } = user
 
-    const { firebaseAdminService } = this.app;
+    const { firebaseAdminService } = this.app
 
-    const { uid: authUid } = await firebaseAdminService.createUser({ email, password, phone });
-    this.app.log.info('authUid', authUid);
+    const { uid: authUid } = await firebaseAdminService.createUser({ email, password, phone })
+    this.app.log.info('authUid', authUid)
     const userObjec = {
       authUid,
       fullName,
@@ -48,11 +48,11 @@ class UserController extends Controller {
       email,
       address,
       phone
-    };
+    }
 
-    const createdUser = await this.createOne({ tableName: 'User', objectToCreate: userObjec });
+    const createdUser = await this.createOne({ tableName: 'User', objectToCreate: userObjec })
 
-    return createdUser;
+    return createdUser
   }
 
   /**
@@ -64,16 +64,16 @@ class UserController extends Controller {
    */
   async getOneUser ({ attribute, value }) {
     if (!attribute || !value) {
-      throw throwError(`attribute and value are needed`, 400);
+      throw throwError('attribute and value are needed', 400)
     }
 
     const user = await this.getOne({
       tableName: 'User',
       attributeName: attribute,
       attributeValue: value
-    });
+    })
 
-    return user;
+    return user
   }
 
   async updateOneUser ({ id, user = {} }) {
@@ -81,9 +81,9 @@ class UserController extends Controller {
       tableName: 'User',
       id,
       objectToUpdate: user
-    });
+    })
 
-    return updatedUser;
+    return updatedUser
   }
 
   /**
@@ -94,32 +94,32 @@ class UserController extends Controller {
    * @memberof UserController
    */
   async login ({ email, password }) {
-    const { firebaseService } = this.app;
+    const { firebaseService } = this.app
 
     // get the user
-    const firebaseUser = await firebaseService.login({ email, password });
+    const firebaseUser = await firebaseService.login({ email, password })
 
     // this.app.log.info('firebaseUser', firebaseUser);
 
-    const { uid: authUid } = firebaseUser;
+    const { uid: authUid } = firebaseUser
 
-    const user = await this.getOneUser({ attribute: 'authUid', value: authUid });
+    const user = await this.getOneUser({ attribute: 'authUid', value: authUid })
 
-    const { verifiedEmail } = user;
+    const { verifiedEmail } = user
     if (!verifiedEmail) {
-      throw throwError(`your email address is not verified.`, 412);
+      throw throwError('your email address is not verified.', 412)
     }
 
     if (!user) {
-      throw throwError(`can't get the user with authUid = ${authUid}`, 412);
+      throw throwError(`can't get the user with authUid = ${authUid}`, 412)
     }
 
     // get the accestoken
-    const { stsTokenManager: { accessToken } } = firebaseUser;
+    const { stsTokenManager: { accessToken } } = firebaseUser
 
-    const roles = await this.getAssignedRoles({ userId: user.id });
+    const roles = await this.getAssignedRoles({ userId: user.id })
 
-    return { ...user, accessToken, roles };
+    return { ...user, accessToken, roles }
   }
 
   /**
@@ -130,56 +130,56 @@ class UserController extends Controller {
    * @memberof UserController
    */
   async sendConfirmationEmail ({ authUid }) {
-    const user = await this.getOneUser({ attribute: 'authUid', value: authUid });
-    if (!user) throw throwError(`can't the user.`, 412);
+    const user = await this.getOneUser({ attribute: 'authUid', value: authUid })
+    if (!user) throw throwError('can\'t the user.', 412)
 
-    const { firebaseAdminService } = this.app;
-    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
-    if (!firebaseUser) throw throwError(`can't the user in firebase.`, 412);
+    const { firebaseAdminService } = this.app
+    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid })
+    if (!firebaseUser) throw throwError('can\'t the user in firebase.', 412)
 
-    const { verifiedEmail } = user;
-    if (verifiedEmail) throw throwError(`email already confirmed.`, 412);
+    const { verifiedEmail } = user
+    if (verifiedEmail) throw throwError('email already confirmed.', 412)
 
     // get the parameters needed
-    const parameterController = new ParameterController({ app: this.app });
-    const SELF_API_URL = await parameterController.getParameterValue({ name: 'SELF_API_URL' });
-    const CONFIRMATION_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'CONFIRMATION_EMAIL_SUBJECT' });
+    const parameterController = new ParameterController({ app: this.app })
+    const SELF_API_URL = await parameterController.getParameterValue({ name: 'SELF_API_URL' })
+    const CONFIRMATION_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'CONFIRMATION_EMAIL_SUBJECT' })
 
     // create the verification code row
-    const { id } = user;
-    const verificationCodeController = new VerificationCodeController({ app: this.app });
+    const { id } = user
+    const verificationCodeController = new VerificationCodeController({ app: this.app })
     const verificationCode = await verificationCodeController.createVerificationCode({
       verificationCodeObj: {
         userId: id,
         expirationDate: moment().utc().add(1, 'd').toDate(),
         type: 'CONFIRMATION_EMAIL'
       }
-    });
+    })
 
     // define the parameters
-    const { fullName } = user;
-    const { code } = verificationCode;
+    const { fullName } = user
+    const { code } = verificationCode
     const params = {
       user: {
         fullName
       },
       link: `${SELF_API_URL}users/confirm-email-address/${code}`
-    };
+    }
 
     // generate the html
-    const html = generateHtmlByTemplate('confirmation-email', params);
+    const html = generateHtmlByTemplate('confirmation-email', params)
 
     // send the email
-    const { mailerService } = this.app;
-    const { email } = user;
+    const { mailerService } = this.app
+    const { email } = user
     const { messageId } = await mailerService.sendMail(
       [email],
       html,
       CONFIRMATION_EMAIL_SUBJECT,
       'awork-team'
-    );
+    )
 
-    return messageId;
+    return messageId
   }
 
   /**
@@ -190,43 +190,43 @@ class UserController extends Controller {
    * @memberof UserController
    */
   async confirmEmailAddress ({ code }) {
-    const verificationCodeController = new VerificationCodeController({ app: this.app });
+    const verificationCodeController = new VerificationCodeController({ app: this.app })
 
     const isTheCodeValid = await verificationCodeController.validCode({
       code,
       type: 'CONFIRMATION_EMAIL'
-    });
+    })
 
     if (!isTheCodeValid) {
-      throw throwError(`the code is not valid`, 412);
+      throw throwError('the code is not valid', 412)
     }
 
     const { userId } = await verificationCodeController.getOneVerificationCode({
       attribute: 'code',
       value: code
-    });
+    })
 
     const { verifiedEmail } = await this.getOneUser({
       attribute: 'id',
       value: userId
-    });
+    })
 
-    if (verifiedEmail) throw throwError(`the code was already used.`, 412);
+    if (verifiedEmail) throw throwError('the code was already used.', 412)
 
-    const parameterController = new ParameterController({ app: this.app });
-    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' });
+    const parameterController = new ParameterController({ app: this.app })
+    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' })
 
     await this.updateOneUser({
       id: userId,
       user: { verifiedEmail: true }
-    });
+    })
 
-    await this.sendWelcomeEmail({ userId });
+    await this.sendWelcomeEmail({ userId })
 
     return {
-      message: `yes! you had confirmed your email addres, we'll send you a welcome email.`,
+      message: 'yes! you had confirmed your email addres, we\'ll send you a welcome email.',
       redirectUrl: `${WEB_BASE_URL}login`
-    };
+    }
   }
 
   /**
@@ -240,35 +240,35 @@ class UserController extends Controller {
     const user = await this.getOneUser({
       attribute: 'id',
       value: userId
-    });
+    })
 
-    if (!user) throw throwError(`can't get the user ${userId}.`, 412);
+    if (!user) throw throwError(`can't get the user ${userId}.`, 412)
 
-    const parameterController = new ParameterController({ app: this.app });
-    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' });
-    const WELCOME_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'WELCOME_EMAIL_SUBJECT' });
+    const parameterController = new ParameterController({ app: this.app })
+    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' })
+    const WELCOME_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'WELCOME_EMAIL_SUBJECT' })
 
-    const { fullName } = user;
+    const { fullName } = user
 
     const params = {
       user: {
         fullName
       },
       link: `${WEB_BASE_URL}login`
-    };
+    }
 
-    const html = generateHtmlByTemplate('welcome-email', params);
+    const html = generateHtmlByTemplate('welcome-email', params)
 
-    const { mailerService } = this.app;
-    const { email } = user;
+    const { mailerService } = this.app
+    const { email } = user
     const { messageId } = await mailerService.sendMail(
       [email],
       html,
       WELCOME_EMAIL_SUBJECT,
       'awork-team'
-    );
+    )
 
-    return messageId;
+    return messageId
   }
 
   /**
@@ -283,61 +283,61 @@ class UserController extends Controller {
     const user = await this.getOneUser({
       attribute: 'email',
       value: email
-    });
+    })
     // check
     if (!user) {
-      throw throwError(`can't get the user with email ${email}.`, 412);
+      throw throwError(`can't get the user with email ${email}.`, 412)
     }
 
     // get the user in firebase
-    const { authUid } = user;
-    const { firebaseAdminService } = this.app;
-    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
+    const { authUid } = user
+    const { firebaseAdminService } = this.app
+    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid })
     // check
     if (!firebaseUser) {
-      throw throwError(`can't the user with email ${email} in firebase.`, 412);
+      throw throwError(`can't the user with email ${email} in firebase.`, 412)
     }
 
     // get the parameters needed
-    const parameterController = new ParameterController({ app: this.app });
-    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' });
-    const FORGOT_PASSWORD_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'FORGOT_PASSWORD_EMAIL_SUBJECT' });
+    const parameterController = new ParameterController({ app: this.app })
+    const WEB_BASE_URL = await parameterController.getParameterValue({ name: 'WEB_BASE_URL' })
+    const FORGOT_PASSWORD_EMAIL_SUBJECT = await parameterController.getParameterValue({ name: 'FORGOT_PASSWORD_EMAIL_SUBJECT' })
 
-    const { id: userId } = user;
+    const { id: userId } = user
 
     // create the verification code row
-    const verificationCodeController = new VerificationCodeController({ app: this.app });
+    const verificationCodeController = new VerificationCodeController({ app: this.app })
     const verificationCode = await verificationCodeController.createVerificationCode({
       verificationCodeObj: {
         userId: userId,
         expirationDate: moment().utc().add(1, 'd').toDate(),
         type: 'FORGOT_PASSWORD'
       }
-    });
+    })
 
     // define the parameters for the email template
-    const { code } = verificationCode;
-    const { fullName } = user;
+    const { code } = verificationCode
+    const { fullName } = user
     const params = {
       user: {
         fullName
       },
       link: `${WEB_BASE_URL}reset-password?code=${code}`
-    };
+    }
 
     // generate the html
-    const html = generateHtmlByTemplate('forgot-password-email', params);
+    const html = generateHtmlByTemplate('forgot-password-email', params)
 
     // send the email
-    const { mailerService } = this.app;
+    const { mailerService } = this.app
     const { messageId } = await mailerService.sendMail(
       [email],
       html,
       FORGOT_PASSWORD_EMAIL_SUBJECT,
       'awork-team'
-    );
+    )
 
-    return messageId;
+    return messageId
   }
 
   /**
@@ -349,51 +349,51 @@ class UserController extends Controller {
   async changePasswordFromCode ({ code, password, repeatedPassword }) {
     // check the passwords
     if (password !== repeatedPassword) {
-      throw throwError(`the passwords don't match`, 412);
+      throw throwError('the passwords don\'t match', 412)
     }
 
-    const verificationCodeController = new VerificationCodeController({ app: this.app });
+    const verificationCodeController = new VerificationCodeController({ app: this.app })
 
     // check if the code is valid
     const isTheCodeValid = await verificationCodeController.validCode({
       code,
       type: 'FORGOT_PASSWORD'
-    });
+    })
 
     if (!isTheCodeValid) {
-      throw throwError(`the code is not valid.`, 412);
+      throw throwError('the code is not valid.', 412)
     }
 
     // get the user id from the verification code
     const { userId } = await verificationCodeController.getOneVerificationCode({
       attribute: 'code',
       value: code
-    });
+    })
 
     // get the user
     const user = await this.getOneUser({
       attribute: 'id',
       value: userId
-    });
+    })
 
-    const { authUid } = user;
+    const { authUid } = user
 
     // get the user in firebase
-    const { firebaseAdminService } = this.app;
-    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
+    const { firebaseAdminService } = this.app
+    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid })
     // check
     if (!firebaseUser) {
-      throw throwError(`can't get the user in firebase.`, 412);
+      throw throwError('can\'t get the user in firebase.', 412)
     }
 
-    await firebaseAdminService.updateUser({ uid: authUid, attributes: { password } });
+    await firebaseAdminService.updateUser({ uid: authUid, attributes: { password } })
 
-    this.sendPasswordChagedAlertEmail({ userId });
+    this.sendPasswordChagedAlertEmail({ userId })
 
     return {
       userId,
       passwordChanged: true
-    };
+    }
   }
 
   /**
@@ -407,33 +407,33 @@ class UserController extends Controller {
     const user = await this.getOneUser({
       attribute: 'id',
       value: userId
-    });
+    })
 
-    if (!user) throw throwError(`can't get the user ${userId}.`, 412);
+    if (!user) throw throwError(`can't get the user ${userId}.`, 412)
 
-    const parameterController = new ParameterController({ app: this.app });
-    const PASSWORD_CHANGED_ALERT_SUBJECT = await parameterController.getParameterValue({ name: 'PASSWORD_CHANGED_ALERT_SUBJECT' });
+    const parameterController = new ParameterController({ app: this.app })
+    const PASSWORD_CHANGED_ALERT_SUBJECT = await parameterController.getParameterValue({ name: 'PASSWORD_CHANGED_ALERT_SUBJECT' })
 
-    const { fullName } = user;
+    const { fullName } = user
 
     const params = {
       user: {
         fullName
       }
-    };
+    }
 
-    const html = generateHtmlByTemplate('password-changed-alert-email', params);
+    const html = generateHtmlByTemplate('password-changed-alert-email', params)
 
-    const { mailerService } = this.app;
-    const { email } = user;
+    const { mailerService } = this.app
+    const { email } = user
     const { messageId } = await mailerService.sendMail(
       [email],
       html,
       PASSWORD_CHANGED_ALERT_SUBJECT,
       'awork-team'
-    );
+    )
 
-    return messageId;
+    return messageId
   }
 
   /**
@@ -446,29 +446,29 @@ class UserController extends Controller {
   async changePassword ({ email, oldPassword, password, repeatedPassword }) {
     // check the passwords
     if (password !== repeatedPassword) {
-      throw throwError(`the passwords don't match.`, 412);
+      throw throwError('the passwords don\'t match.', 412)
     }
 
     // login the user with the old password
     const { id: userId, authUid } = await this.login({
       email,
       password: oldPassword
-    });
+    })
 
     // change the password
-    const { firebaseAdminService } = this.app;
-    await firebaseAdminService.updateUser({ uid: authUid, attributes: { password } });
+    const { firebaseAdminService } = this.app
+    await firebaseAdminService.updateUser({ uid: authUid, attributes: { password } })
 
     // login the user with the new password
     const { accessToken } = await this.login({
       email,
       password
-    });
+    })
 
     // the the alert email
-    this.sendPasswordChagedAlertEmail({ userId });
+    this.sendPasswordChagedAlertEmail({ userId })
 
-    return { accessToken };
+    return { accessToken }
   }
 
   /**
@@ -479,45 +479,45 @@ class UserController extends Controller {
    */
   async changeEmailAdress ({ oldEmail, email, repeatedEmail }) {
     if (oldEmail === email) {
-      throw throwError(`the email can't be the current email.`, 412);
+      throw throwError('the email can\'t be the current email.', 412)
     }
     if (email !== repeatedEmail) {
-      throw throwError(`the emails don't match.`, 412);
+      throw throwError('the emails don\'t match.', 412)
     }
 
     // get the user
     const currentUser = await this.getOneUser({
       attribute: 'email',
       value: oldEmail
-    });
+    })
     // check
     if (!currentUser) {
-      throw throwError(`can't get the user.`, 412);
+      throw throwError('can\'t get the user.', 412)
     }
 
     // check if there an user with the email
     const existingUserForTheEmail = await this.getOneUser({
       attribute: 'email',
       value: email
-    });
+    })
     // check
     if (existingUserForTheEmail && existingUserForTheEmail.id !== currentUser.id) {
-      throw throwError(`the email ${email} is already used.`, 412);
+      throw throwError(`the email ${email} is already used.`, 412)
     }
 
-    const { authUid } = currentUser;
+    const { authUid } = currentUser
 
     // get the firebase user
-    const { firebaseAdminService } = this.app;
-    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid });
+    const { firebaseAdminService } = this.app
+    const firebaseUser = await firebaseAdminService.getUserByUid({ uid: authUid })
     if (!firebaseUser) {
-      throw throwError(`can't get the firebase user.`, 412);
+      throw throwError('can\'t get the firebase user.', 412)
     }
 
     // update the email
-    await firebaseAdminService.updateUser({ uid: authUid, attributes: { email } });
+    await firebaseAdminService.updateUser({ uid: authUid, attributes: { email } })
 
-    const { id: userId } = currentUser;
+    const { id: userId } = currentUser
 
     await this.updateOneUser({
       id: userId,
@@ -525,18 +525,18 @@ class UserController extends Controller {
         email: email,
         verifiedEmail: false
       }
-    });
+    })
 
     // send the alert email
-    this.sendEmailAdressChangedEmail({ oldEmail, userId });
+    this.sendEmailAdressChangedEmail({ oldEmail, userId })
 
     // send the confirmation email
-    this.sendConfirmationEmail({ authUid });
+    this.sendConfirmationEmail({ authUid })
 
     return {
       userId,
       emailChanged: true
-    };
+    }
   }
 
   /**
@@ -551,33 +551,33 @@ class UserController extends Controller {
     const user = await this.getOneUser({
       attribute: 'id',
       value: userId
-    });
+    })
     if (!user) {
-      throw throwError(`can't get the user.`, 412);
+      throw throwError('can\'t get the user.', 412)
     }
 
-    const { fullName } = user;
+    const { fullName } = user
 
     const params = {
       user: {
         fullName
       }
-    };
+    }
 
-    const html = generateHtmlByTemplate('email-changed-alert-email', params);
+    const html = generateHtmlByTemplate('email-changed-alert-email', params)
 
-    const parameterController = new ParameterController({ app: this.app });
-    const EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT = await parameterController.getParameterValue({ name: 'EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT' });
+    const parameterController = new ParameterController({ app: this.app })
+    const EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT = await parameterController.getParameterValue({ name: 'EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT' })
 
-    const { mailerService } = this.app;
+    const { mailerService } = this.app
     const { messageId } = await mailerService.sendMail(
       [oldEmail],
       html,
       EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT,
       'awork-team'
-    );
+    )
 
-    return messageId;
+    return messageId
   }
 
   /**
@@ -590,29 +590,29 @@ class UserController extends Controller {
   async updateUserData ({ currentUser, userData = {} }) {
     // check if the user data to update has data
     if (isEmptyObject(userData)) {
-      return currentUser;
+      return currentUser
     }
 
     // delete the important fields
-    if (userData.password) delete userData.password;
-    if (userData.email) delete userData.email;
+    if (userData.password) delete userData.password
+    if (userData.email) delete userData.email
 
-    const { id: userId } = currentUser;
+    const { id: userId } = currentUser
 
     // update the user data
-    const updatedUser = await this.updateOneUser({ id: userId, user: userData });
+    const updatedUser = await this.updateOneUser({ id: userId, user: userData })
 
     if (!userData.phone) {
-      const { firebaseAdminService } = this.app;
+      const { firebaseAdminService } = this.app
       await firebaseAdminService.updateUser({
         uid: currentUser.authUid,
         attributes: {
           phone: userData.phone
         }
-      });
+      })
     }
 
-    return updatedUser;
+    return updatedUser
   }
 
   /**
@@ -623,19 +623,19 @@ class UserController extends Controller {
    * @memberof UserController
    */
   async getAssignedRoles ({ userId }) {
-    const { knex } = this.app;
+    const { knex } = this.app
 
     const query = knex.select('R.*')
       .from('User as U')
       .innerJoin('AssignedRole as AR', 'U.id', '=', 'AR.userId')
       .innerJoin('Role as R', 'AR.roleId', '=', 'R.id')
-      .where('U.id', '=', userId);
+      .where('U.id', '=', userId)
 
     // this.app.log.info('query', query.toString());
 
-    const data = await query;
+    const data = await query
 
-    return data;
+    return data
   }
 
   /**
@@ -648,7 +648,7 @@ class UserController extends Controller {
    * @memberof UserController
    */
   async getUserScreens ({ userId }) {
-    const { knex } = this.app;
+    const { knex } = this.app
 
     const functionalityQuery = knex.select('F.*')
       .from('User as U')
@@ -658,28 +658,28 @@ class UserController extends Controller {
       .innerJoin('Functionality as F', 'FR.functionalityId', '=', 'F.id')
       .where('FR.allowed', '=', true)
       .andWhere('U.id', '=', userId)
-      .andWhere('AR.main', '=', 1);
+      .andWhere('AR.main', '=', 1)
 
-    const functionalities = await functionalityQuery;
+    const functionalities = await functionalityQuery
 
     const funcAndScreens = await Promise.all(functionalities.map(async functionality => {
       const query = knex.select('S.*')
         .from('Screen as S')
-        .where('S.functionalityId', '=', functionality.id);
-      const screens = await query;
+        .where('S.functionalityId', '=', functionality.id)
+      const screens = await query
 
-      if (!screens.length) return;
+      if (!screens.length) return
 
       return {
         ...functionality,
         screens
-      };
-    }));
+      }
+    }))
 
-    return funcAndScreens.filter(item => !!item);
+    return funcAndScreens.filter(item => !!item)
   }
 }
 
 module.exports = {
   UserController
-};
+}

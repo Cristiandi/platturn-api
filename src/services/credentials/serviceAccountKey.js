@@ -1,4 +1,4 @@
-const environment = require('../../environment');
+const environment = require('../../environment')
 
 module.exports = {
   type: environment.GCP_TYPE,
@@ -10,4 +10,4 @@ module.exports = {
   token_uri: environment.GCP_TOKEN_URI,
   auth_provider_x509_cert_url: environment.GCP_AUTH_PROVIDER_X509_CERT_URL,
   client_x509_cert_url: environment.GCP_CLIENT_X509_CERT_URL
-};
+}

@@ -21,25 +21,25 @@ const seed = async knex => {
       name: 'Usuario basico',
       code: 'RO04'
     }
-  ];
+  ]
 
   const promises = roles.map(async role => {
-    const rows = await knex('Role').select('id').where('code', role.code);
+    const rows = await knex('Role').select('id').where('code', role.code)
     if (!rows.length) {
-      const [id] = await knex('Role').insert(role);
-      return { id };
+      const [id] = await knex('Role').insert(role)
+      return { id }
     } else {
       await knex('Role')
         .update({ ...role })
         .where({
           code: role.code
-        });
+        })
     }
-  });
+  })
 
-  await Promise.all(promises);
-};
+  await Promise.all(promises)
+}
 
 module.exports = {
   seed
-};
+}

@@ -9,9 +9,9 @@ const companyPorperties = {
   userId: { type: 'number' },
   created_at: { type: 'string' },
   updated_at: { type: 'string' }
-};
+}
 
-const tags = ['companies'];
+const tags = ['companies']
 
 const paramsJsonSchema = {
   type: 'object',
@@ -19,7 +19,7 @@ const paramsJsonSchema = {
     companyId: { type: 'number' }
   },
   required: ['companyId']
-};
+}
 
 const queryStringJsonSchema = {
   type: 'object',
@@ -27,18 +27,18 @@ const queryStringJsonSchema = {
     filter: { type: 'string' }
   },
   required: ['filter']
-};
+}
 
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: companyPorperties,
   required: ['name', 'code', 'document', 'email']
-};
+}
 
 const bodyUpdateJsonSchema = {
   type: 'object',
   properties: companyPorperties
-};
+}
 
 const getAllSchema = {
   tags,
@@ -55,7 +55,7 @@ const getAllSchema = {
       }
     }
   }
-};
+}
 
 const getOneSchema = {
   tags,
@@ -70,7 +70,7 @@ const getOneSchema = {
       properties: companyPorperties
     }
   }
-};
+}
 
 const createSchema = {
   tags,
@@ -84,7 +84,7 @@ const createSchema = {
       properties: companyPorperties
     }
   }
-};
+}
 
 const updateSchema = {
   tags,
@@ -99,7 +99,7 @@ const updateSchema = {
       properties: companyPorperties
     }
   }
-};
+}
 
 const deleteSchema = {
   tags,
@@ -113,7 +113,7 @@ const deleteSchema = {
       properties: companyPorperties
     }
   }
-};
+}
 
 const getUserCompanies = {
   tags,
@@ -129,7 +129,7 @@ const getUserCompanies = {
       }
     }
   }
-};
+}
 
 module.exports = {
   getAllSchema,
@@ -138,4 +138,4 @@ module.exports = {
   updateSchema,
   deleteSchema,
   getUserCompanies
-};
+}

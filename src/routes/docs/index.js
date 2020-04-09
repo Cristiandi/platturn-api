@@ -1,4 +1,4 @@
-const { APP_PORT } = require('../../environment');
+const { APP_PORT } = require('../../environment')
 
 module.exports = {
   routePrefix: '/documentation',
@@ -35,4 +35,4 @@ module.exports = {
       { name: 'companies', description: 'Company related end-points' }
     ]
   }
-};
+}

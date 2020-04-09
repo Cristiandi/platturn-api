@@ -1,9 +1,9 @@
-const { Controller } = require('./controller');
-const { throwError, isEmptyObject } = require('../utils/functions');
+const { Controller } = require('./controller')
+const { throwError, isEmptyObject } = require('../utils/functions')
 
 class CompanyController extends Controller {
   constructor ({ app }) {
-    super({ app });
+    super({ app })
   }
 
   /**
@@ -14,32 +14,32 @@ class CompanyController extends Controller {
    * @memberof CompanyController
    */
   async createCompany ({ company }) {
-    const { code } = company;
+    const { code } = company
 
     const existingCompany = await this.getOneCompany({
       attribute: 'code',
       value: code
-    });
+    })
 
     if (existingCompany) {
-      throw throwError(`a company already exists for the code ${code}.`, 412);
+      throw throwError(`a company already exists for the code ${code}.`, 412)
     }
 
     const existingCompanyForUser = await this.getOneCompany({
       attribute: 'userId',
       value: company.userId
-    });
+    })
 
     if (existingCompanyForUser) {
-      throw throwError(`the user already had created a company.`, 412);
+      throw throwError('the user already had created a company.', 412)
     }
 
     const createdCompany = await this.createOne({
       tableName: 'Company',
       objectToCreate: company
-    });
+    })
 
-    return createdCompany;
+    return createdCompany
   }
 
   /**
@@ -51,16 +51,16 @@ class CompanyController extends Controller {
    */
   async getOneCompany ({ attribute, value }) {
     if (!attribute || !value) {
-      throw throwError(`attribute and value are needed`, 400);
+      throw throwError('attribute and value are needed', 400)
     }
 
     const user = await this.getOne({
       tableName: 'Company',
       attributeName: attribute,
       attributeValue: value
-    });
+    })
 
-    return user;
+    return user
   }
 
   /**
@@ -75,26 +75,26 @@ class CompanyController extends Controller {
     const currentCompany = await this.getOneCompany({
       attribute: 'id',
       value: companyId
-    });
+    })
 
     // check
     if (!currentCompany) {
-      throw throwError(`can't the company ${companyId}`, 412);
+      throw throwError(`can't the company ${companyId}`, 412)
     }
     if (currentCompany.userId !== loggedUserId) {
-      throw throwError(`the user can't update the company ${companyId}`, 412);
+      throw throwError(`the user can't update the company ${companyId}`, 412)
     }
 
-    if (isEmptyObject(company)) return currentCompany;
+    if (isEmptyObject(company)) return currentCompany
 
-    const { email } = company;
+    const { email } = company
     if (email) {
       const existingCompanyForEmail = await this.getOneCompany({
         attribute: 'email',
         value: email
-      });
+      })
       if (existingCompanyForEmail && currentCompany.id !== existingCompanyForEmail.id) {
-        throw throwError(`the email ${email} is already used.`, 412);
+        throw throwError(`the email ${email} is already used.`, 412)
       }
     }
 
@@ -102,12 +102,12 @@ class CompanyController extends Controller {
       tableName: 'Company',
       id: companyId,
       objectToUpdate: company
-    });
+    })
 
-    return updatedCompany;
+    return updatedCompany
   }
 }
 
 module.exports = {
   CompanyController
-};
+}

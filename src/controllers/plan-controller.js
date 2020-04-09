@@ -1,19 +1,19 @@
-const { Controller } = require('./controller');
+const { Controller } = require('./controller')
 
 class PlanController extends Controller {
   constructor ({ app }) {
-    super({ app });
+    super({ app })
   }
 
   async getAllPlans () {
     const plans = await this.getAll({
       tableName: 'Plan'
-    });
+    })
 
-    return plans;
+    return plans
   }
 };
 
 module.exports = {
   PlanController
-};
+}

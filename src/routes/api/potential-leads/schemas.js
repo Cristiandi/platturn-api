@@ -6,9 +6,9 @@ const potentialLeadPorperties = {
   email: { type: 'string', maxLength: 100, pattern: '[a-z0-9\._%+!$&*=^|~#%{}\\-]+@([a-z0-9\-]+\.){1,}([a-z]{2,22})' },
   phone: { type: 'number', maximum: 9999999999 },
   observation: { type: 'string', minLength: 20, maxLength: 200 }
-};
+}
 
-const tags = ['potential-leads'];
+const tags = ['potential-leads']
 
 const paramsJsonSchema = {
   type: 'object',
@@ -16,7 +16,7 @@ const paramsJsonSchema = {
     potentialLeadId: { type: 'number' }
   },
   required: ['potentialLeadId']
-};
+}
 
 const queryStringJsonSchema = {
   type: 'object',
@@ -24,18 +24,18 @@ const queryStringJsonSchema = {
     filter: { type: 'string' }
   },
   required: ['filter']
-};
+}
 
 const bodyCreateJsonSchema = {
   type: 'object',
   properties: potentialLeadPorperties,
   required: ['fullName', 'email']
-};
+}
 
 const bodyUpdateJsonSchema = {
   type: 'object',
   properties: potentialLeadPorperties
-};
+}
 
 const getAllSchema = {
   tags,
@@ -52,7 +52,7 @@ const getAllSchema = {
       }
     }
   }
-};
+}
 
 const getOneSchema = {
   tags,
@@ -67,7 +67,7 @@ const getOneSchema = {
       properties: potentialLeadPorperties
     }
   }
-};
+}
 
 const createSchema = {
   tags,
@@ -78,7 +78,7 @@ const createSchema = {
       properties: potentialLeadPorperties
     }
   }
-};
+}
 
 const updateSchema = {
   tags,
@@ -93,7 +93,7 @@ const updateSchema = {
       properties: potentialLeadPorperties
     }
   }
-};
+}
 
 const deleteSchema = {
   tags,
@@ -107,7 +107,7 @@ const deleteSchema = {
       properties: potentialLeadPorperties
     }
   }
-};
+}
 
 module.exports = {
   getAllSchema,
@@ -115,4 +115,4 @@ module.exports = {
   createSchema,
   updateSchema,
   deleteSchema
-};
+}

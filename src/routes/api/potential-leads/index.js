@@ -1,10 +1,10 @@
-const { PotentialLeadController } = require('../../../controllers/potential-lead-controller');
+const { PotentialLeadController } = require('../../../controllers/potential-lead-controller')
 const {
   createSchema
-} = require('./schemas');
+} = require('./schemas')
 
 const potentialLeadRoutes = async (app, options) => {
-  const potentialLeadController = new PotentialLeadController({ app });
+  const potentialLeadController = new PotentialLeadController({ app })
 
   // create
   app.post(
@@ -19,13 +19,13 @@ const potentialLeadRoutes = async (app, options) => {
       schema: createSchema
     },
     async (request, reply) => {
-      const { body } = request;
+      const { body } = request
 
-      const createdPotentialLead = await potentialLeadController.createPotentialLead({ potentialLead: body });
+      const createdPotentialLead = await potentialLeadController.createPotentialLead({ potentialLead: body })
 
-      return reply.code(201).send(createdPotentialLead);
+      return reply.code(201).send(createdPotentialLead)
     }
-  );
-};
+  )
+}
 
-module.exports = potentialLeadRoutes;
+module.exports = potentialLeadRoutes

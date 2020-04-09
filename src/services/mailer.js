@@ -1,13 +1,13 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer')
 
-const environment = require('../environment');
+const environment = require('../environment')
 
-const { ParameterController } = require('../controllers/parameter-controller');
+const { ParameterController } = require('../controllers/parameter-controller')
 
 class MailerService {
   constructor ({ app }) {
-    this.app = app;
-    this.nodeMailer = nodemailer;
+    this.app = app
+    this.nodeMailer = nodemailer
   }
 
   /**
@@ -19,10 +19,10 @@ class MailerService {
   createAccount () {
     return new Promise((resolve, reject) => {
       this.nodeMailer.createTestAccount((err, account) => {
-        if (err) return reject(err);
-        return resolve(account);
-      });
-    });
+        if (err) return reject(err)
+        return resolve(account)
+      })
+    })
   }
 
   /**
@@ -40,9 +40,9 @@ class MailerService {
         user: environment.SMTP_USER,
         pass: environment.SMTP_PW
       }
-    });
+    })
 
-    return transporter;
+    return transporter
   }
 
   /**
@@ -64,15 +64,15 @@ class MailerService {
     // this.app.log.info('stringHtml', stringHtml);
     // this.app.log.info('---------------------------------');
 
-    const parameterController = new ParameterController({ app: this.app });
+    const parameterController = new ParameterController({ app: this.app })
 
-    const FROM_EMAIL = await parameterController.getParameterValue({ name: 'FROM_EMAIL' });
+    const FROM_EMAIL = await parameterController.getParameterValue({ name: 'FROM_EMAIL' })
 
-    const transporter = await this.createTransporter();
+    const transporter = await this.createTransporter()
 
-    const subjectTo = environment.NODE_ENV === 'production' ? subject : `${environment.NODE_ENV} | ${subject}`;
+    const subjectTo = environment.NODE_ENV === 'production' ? subject : `${environment.NODE_ENV} | ${subject}`
 
-    this.app.log.info('subjectTo', subjectTo);
+    this.app.log.info('subjectTo', subjectTo)
 
     const mailOptions = {
       from: FROM_EMAIL,
@@ -81,20 +81,20 @@ class MailerService {
       text,
       html: stringHtml,
       attachments
-    };
+    }
 
     return new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, (err, info) => {
-        if (err) return reject(err);
-        this.app.log.info('---------------------------------');
-        this.app.log.info('Message sent: %s', info.messageId);
-        this.app.log.info('---------------------------------');
-        return resolve(info);
-      });
-    });
+        if (err) return reject(err)
+        this.app.log.info('---------------------------------')
+        this.app.log.info('Message sent: %s', info.messageId)
+        this.app.log.info('---------------------------------')
+        return resolve(info)
+      })
+    })
   }
 }
 
 module.exports = {
   MailerService
-};
+}

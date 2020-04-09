@@ -1,28 +1,28 @@
-const dotenv = require('dotenv');
-const path = require('path');
+const dotenv = require('dotenv')
+const path = require('path')
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
-let envPath;
+let envPath
 
 // validate the NODE_ENV
-const NODE_ENV = process.env.NODE_ENV;
+const NODE_ENV = process.env.NODE_ENV
 switch (NODE_ENV) {
-case 'development':
-  envPath = path.resolve(__dirname, '../.env.development');
-  break;
-case 'staging':
-  envPath = path.resolve(__dirname, '../.env.staging');
-  break;
-case 'production':
-  envPath = path.resolve(__dirname, '../.env.production');
-  break;
-default:
-  envPath = path.resolve(__dirname, '../.env.local');
-  break;
+  case 'development':
+    envPath = path.resolve(__dirname, '../.env.development')
+    break
+  case 'staging':
+    envPath = path.resolve(__dirname, '../.env.staging')
+    break
+  case 'production':
+    envPath = path.resolve(__dirname, '../.env.production')
+    break
+  default:
+    envPath = path.resolve(__dirname, '../.env.local')
+    break
 };
 
-dotenv.config({ path: envPath });
+dotenv.config({ path: envPath })
 
 const enviroment = {
   /* GENERAL */
@@ -71,6 +71,6 @@ const enviroment = {
   KEY_TO_CRYP: process.env.KEY_TO_CRYP,
   /* WEB */
   WEB_BASE_URL: process.env.WEB_BASE_URL
-};
+}
 
-module.exports = enviroment;
+module.exports = enviroment
