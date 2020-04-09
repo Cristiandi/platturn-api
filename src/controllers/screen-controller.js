@@ -1,18 +1,18 @@
-const { Controller } = require('./controller');
-const { throwError } = require('../utils/functions');
+const { Controller } = require('./controller')
+const { throwError } = require('../utils/functions')
 
 class ScreenController extends Controller {
   constructor ({ app }) {
-    super({ app });
+    super({ app })
   }
 
   async createScreen ({ screen }) {
     const createdScreen = await this.createOne({
       tableName: 'Screen',
       objectToCreate: screen
-    });
+    })
 
-    return createdScreen;
+    return createdScreen
   }
 
   /**
@@ -26,29 +26,29 @@ class ScreenController extends Controller {
     * @memberof RouteControllor
     */
   async getAllScreens ({ attribute, value }) {
-    const { knex } = this.app;
+    const { knex } = this.app
 
     const query = knex.select('S.*', 'F.name as functionality')
       .from('Screen as S')
-      .innerJoin('Functionality as F', 'S.functionalityId', '=', 'F.id');
+      .innerJoin('Functionality as F', 'S.functionalityId', '=', 'F.id')
 
-    const data = await query;
+    const data = await query
 
-    return data;
+    return data
   }
 
   async getOneScreen ({ attribute, value }) {
     if (!attribute || !value) {
-      throw throwError(`attribute and value are needed`, 400);
+      throw throwError('attribute and value are needed', 400)
     }
 
     const functionality = await this.getOne({
       tableName: 'Screen',
       attributeName: attribute,
       attributeValue: value
-    });
+    })
 
-    return functionality;
+    return functionality
   }
 
   async updateScreen ({ screenId, screen }) {
@@ -56,21 +56,21 @@ class ScreenController extends Controller {
       tableName: 'Screen',
       id: screenId,
       objectToUpdate: screen
-    });
+    })
 
-    return updatedScreen;
+    return updatedScreen
   }
 
   async deleteScreen ({ screenId }) {
     const deletedScreen = await this.deleteOne({
       tableName: 'Screen',
       id: screenId
-    });
+    })
 
-    return deletedScreen;
+    return deletedScreen
   }
 }
 
 module.exports = {
   ScreenController
-};
+}
