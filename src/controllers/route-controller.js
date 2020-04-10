@@ -5,6 +5,15 @@ class RouteControllor extends Controller {
     super({ app })
   }
 
+  async createRoute ({ route }) {
+    const createdRoute = await this.createOne({
+      tableName: 'Route',
+      objectToCreate: route
+    })
+
+    return createdRoute
+  }
+
   /**
    * function to get all the routes
    *
@@ -30,6 +39,25 @@ class RouteControllor extends Controller {
     const routes = await query
 
     return routes
+  }
+
+  async updateRoute ({ routeId, route }) {
+    const updatedRoute = await this.updateOne({
+      id: routeId,
+      tableName: 'Route',
+      objectToUpdate: route
+    })
+
+    return updatedRoute
+  }
+
+  async deleteRoute ({ routeId }) {
+    const deletedRoute = await this.deleteOne({
+      tableName: 'Route',
+      id: routeId
+    })
+
+    return deletedRoute
   }
 
   /**

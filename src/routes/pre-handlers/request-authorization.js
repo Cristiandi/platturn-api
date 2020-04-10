@@ -36,7 +36,7 @@ const getTheUserByToken = async (app, token) => {
   return user
 }
 
-const canTheUserHaveThis = async (app, userId, url) => {
+const canTheUserHaveThis = async ({ app, userId, url, method }) => {
   const userController = new UserController({ app })
 
   // get the user roles
@@ -68,7 +68,7 @@ const canTheUserHaveThis = async (app, userId, url) => {
     const urlToCheck = url.split('?')[0]
 
     const result = regexp.exec(urlToCheck)
-    if (result) {
+    if (result && route.httpMethod === method) {
       requestedRoute = route
       break
     }
@@ -109,11 +109,11 @@ const requestAuthorization = app => async (request, reply) => {
   else if (token) {
     const user = await getTheUserByToken(app, token)
 
-    const { raw: { url } } = request
-    // app.log.info('----------------');
-    // app.log.info(request);
-    // app.log.info('----------------');
-    if (!await canTheUserHaveThis(app, user.id, url)) {
+    const { raw: { url, method } } = request
+    app.log.info('----------------')
+    app.log.info(method)
+    app.log.info('----------------')
+    if (!await canTheUserHaveThis({ app, userId: user.id, url, method })) {
       throw throwError('sorry, u can\'t have this.', 403)
     }
 

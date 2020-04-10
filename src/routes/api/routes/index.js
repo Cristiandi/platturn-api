@@ -1,6 +1,9 @@
 const { RouteControllor } = require('../../../controllers/route-controller.js')
 const {
-  getAllSchema
+  getAllSchema,
+  createSchema,
+  updateSchema,
+  deleteSchema
 } = require('./schemas')
 
 const routeRoutes = async (app, options) => {
@@ -9,10 +12,37 @@ const routeRoutes = async (app, options) => {
 
   const routeController = new RouteControllor({ app })
 
-  // get all plans
+  // create a route
+  app.post('/', { schema: createSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { body } = request
+
+    const createdRoute = routeController.createRoute({ route: body })
+
+    return createdRoute
+  })
+
+  // get all routes
   app.get('/', { schema: getAllSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const routes = await routeController.getAllRoutes({})
     return routes
+  })
+
+  // update a route
+  app.patch('/:routeId', { schema: updateSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { params: { routeId }, body } = request
+
+    const updatedRoute = routeController.updateRoute({ routeId, route: body })
+
+    return updatedRoute
+  })
+
+  // delete a route
+  app.delete('/:routeId', { schema: deleteSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
+    const { params: { routeId } } = request
+
+    const deletedRoute = await routeController.deleteRoute({ routeId })
+
+    return deletedRoute
   })
 }
 

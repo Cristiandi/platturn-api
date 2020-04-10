@@ -149,6 +149,24 @@ const seed = async (knex) => {
       httpMethod: 'GET',
       path: '/api/routes',
       isPublic: false
+    },
+    {
+      id: 26,
+      httpMethod: 'POST',
+      path: '/api/routes',
+      isPublic: false
+    },
+    {
+      id: 27,
+      httpMethod: 'PATCH',
+      path: '/api/routes/:storeId',
+      isPublic: false
+    },
+    {
+      id: 28,
+      httpMethod: 'DELETE',
+      path: '/api/routes/:storeId',
+      isPublic: false
     }
   ]
 
