@@ -110,9 +110,9 @@ const requestAuthorization = app => async (request, reply) => {
     const user = await getTheUserByToken(app, token)
 
     const { raw: { url, method } } = request
-    app.log.info('----------------')
-    app.log.info(method)
-    app.log.info('----------------')
+    // app.log.info('----------------')
+    // app.log.info(method)
+    // app.log.info('----------------')
     if (!await canTheUserHaveThis({ app, userId: user.id, url, method })) {
       throw throwError('sorry, u can\'t have this.', 403)
     }
