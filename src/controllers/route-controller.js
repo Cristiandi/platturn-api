@@ -1,4 +1,5 @@
 const { Controller } = require('./controller')
+const { throwError } = require('../utils/functions')
 
 class RouteControllor extends Controller {
   constructor ({ app }) {
@@ -6,6 +7,11 @@ class RouteControllor extends Controller {
   }
 
   async createRoute ({ route }) {
+    const result = await this.canCreateRoute({ route })
+    if (!result.can) {
+      throw throwError(result.message, 412)
+    }
+
     const createdRoute = await this.createOne({
       tableName: 'Route',
       objectToCreate: route
@@ -41,7 +47,22 @@ class RouteControllor extends Controller {
     return routes
   }
 
+  async getOneRoute ({ attribute, value }) {
+    const route = await this.getOne({
+      tableName: 'Route',
+      attributeName: attribute,
+      attributeValue: value
+    })
+
+    return route
+  }
+
   async updateRoute ({ routeId, route }) {
+    const result = await this.canUpdateRoute({ routeId, route })
+    if (!result.can) {
+      throw throwError(result.message, 412)
+    }
+
     const updatedRoute = await this.updateOne({
       id: routeId,
       tableName: 'Route',
@@ -52,12 +73,92 @@ class RouteControllor extends Controller {
   }
 
   async deleteRoute ({ routeId }) {
+    const result = await this.canDeleteRoute({ routeId })
+    if (!result.can) {
+      throw throwError(result.message, 412)
+    }
+
     const deletedRoute = await this.deleteOne({
       tableName: 'Route',
       id: routeId
     })
 
     return deletedRoute
+  }
+
+  async canCreateRoute ({ route = {} }) {
+    const { knex } = this.app
+    const { routes } = (await knex('Route')
+      .count('id', { as: 'routes' })
+      .where({
+        httpMethod: route.httpMethod,
+        path: route.path
+      }))[0]
+
+    if (routes) {
+      return {
+        can: false,
+        message: `already exists a route with the httpMethod ${route.httpMethod} and the path ${route.path}.`
+      }
+    }
+
+    return {
+      can: true,
+      message: null
+    }
+  }
+
+  async canUpdateRoute ({ routeId, route = {} }) {
+    const { knex } = this.app
+
+    const data = await knex.select('*')
+      .from('Route')
+      .where({
+        httpMethod: route.httpMethod || null,
+        path: route.path || null
+      })
+
+    if (!data.length) {
+      return {
+        can: true,
+        message: null
+      }
+    }
+
+    const [routeFor] = data
+
+    if (routeId !== routeFor.id) {
+      return {
+        can: false,
+        message: `already exists a route with the httpMethod ${route.httpMethod} and the path ${route.path}.`
+      }
+    }
+
+    return {
+      can: true,
+      message: null
+    }
+  }
+
+  async canDeleteRoute ({ routeId }) {
+    const { knex } = this.app
+    const { routes } = (await knex('FunctionalityRoute')
+      .count('id', { as: 'routes' })
+      .where({
+        routeId
+      }))[0]
+
+    if (routes) {
+      return {
+        can: false,
+        message: 'route has functionalities.'
+      }
+    }
+
+    return {
+      can: true,
+      message: null
+    }
   }
 
   /**
