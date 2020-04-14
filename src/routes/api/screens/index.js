@@ -38,6 +38,7 @@ const screensRoutes = async (app, options) => {
     return { ...updated, message: 'screen updated!' }
   })
 
+  // delete screen
   app.delete('/:screenId', { schema: deleteSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const { params: { screenId } } = request
 
