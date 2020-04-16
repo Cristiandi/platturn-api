@@ -1,4 +1,4 @@
-const { FunctionalityController } = require('../../../controllers/functionality-controller')
+const { FunctionalityController } = require('../../../controllers/Functionality.controller')
 const {
   getAllSchema,
   createSchema,

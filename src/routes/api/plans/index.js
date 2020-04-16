@@ -1,4 +1,4 @@
-const { PlanController } = require('../../../controllers/plan-controller')
+const { PlanController } = require('../../../controllers/Plan.controller')
 
 const companyRoutes = async (app, options) => {
   const planController = new PlanController({ app })

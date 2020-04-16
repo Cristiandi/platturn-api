@@ -2,7 +2,7 @@ const joi = require('@hapi/joi')
 const uid = require('uid-safe')
 const moment = require('moment')
 
-const { Controller } = require('./controller')
+const { Controller } = require('./Controller.controller')
 const { throwError } = require('../utils/functions')
 
 class VerificationCodeController extends Controller {

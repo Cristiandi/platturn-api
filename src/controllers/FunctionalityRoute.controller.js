@@ -1,6 +1,6 @@
-const { Controller } = require('./controller')
-const { FunctionalityController } = require('./functionality-controller')
-const { RouteControllor } = require('./route-controller')
+const { Controller } = require('./Controller.controller')
+const { FunctionalityController } = require('./Functionality.controller')
+const { RouteControllor } = require('./Route.controller')
 const { throwError } = require('../utils/functions')
 
 class FunctionalityRouteController extends Controller {

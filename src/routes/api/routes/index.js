@@ -1,4 +1,4 @@
-const { RouteControllor } = require('../../../controllers/route-controller.js')
+const { RouteControllor } = require('../../../controllers/Route.controller.js')
 const {
   getAllSchema,
   createSchema,

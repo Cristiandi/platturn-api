@@ -1,4 +1,4 @@
-const { Controller } = require('./controller')
+const { Controller } = require('./Controller.controller')
 const { throwError, isEmptyObject } = require('../utils/functions')
 
 class CompanyController extends Controller {

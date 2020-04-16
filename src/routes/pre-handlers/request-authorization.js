@@ -1,8 +1,8 @@
 const { pathToRegexp } = require('path-to-regexp')
 
 const { throwError } = require('../../utils/functions')
-const { UserController } = require('../../controllers/user-controller')
-const { RouteControllor } = require('../../controllers/route-controller')
+const { UserController } = require('../../controllers/User.controller')
+const { RouteControllor } = require('../../controllers/Route.controller')
 
 const API_KEY_PREFIX = '4cl'
 

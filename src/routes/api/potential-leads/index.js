@@ -1,4 +1,4 @@
-const { PotentialLeadController } = require('../../../controllers/potential-lead-controller')
+const { PotentialLeadController } = require('../../../controllers/Potential-lead.controller')
 const {
   createSchema
 } = require('./schemas')

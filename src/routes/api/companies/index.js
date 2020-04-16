@@ -3,7 +3,7 @@ const {
   getUserCompanies,
   updateSchema
 } = require('./schemas')
-const { CompanyController } = require('../../../controllers/company-controller')
+const { CompanyController } = require('../../../controllers/Company.controller')
 
 const companyRoutes = async (app, options) => {
   const { reqAuthPreHandler } = app

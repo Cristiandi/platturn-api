@@ -1,4 +1,4 @@
-const { FunctionalityRouteController } = require('../../../controllers/functionality-route-controller')
+const { FunctionalityRouteController } = require('../../../controllers/FunctionalityRoute.controller')
 const {
   createSchema,
   getAllSchema,

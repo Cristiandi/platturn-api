@@ -1,4 +1,4 @@
-const { UserController } = require('../../../controllers/user-controller')
+const { UserController } = require('../../../controllers/User.controller')
 const { throwError } = require('../../../utils/functions')
 const {
   createSchema,

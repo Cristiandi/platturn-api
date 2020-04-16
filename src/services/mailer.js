@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer')
 
 const environment = require('../environment')
 
-const { ParameterController } = require('../controllers/parameter-controller')
+const { ParameterController } = require('../controllers/Parameter.controller')
 
 class MailerService {
   constructor ({ app }) {

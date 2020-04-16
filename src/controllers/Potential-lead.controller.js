@@ -1,6 +1,6 @@
-const { Controller } = require('./controller')
+const { Controller } = require('./Controller.controller')
 const { throwError, generateHtmlByTemplate } = require('../utils/functions')
-const { ParameterController } = require('./parameter-controller')
+const { ParameterController } = require('./Parameter.controller')
 
 class PotentialLeadController extends Controller {
   constructor ({ app }) {

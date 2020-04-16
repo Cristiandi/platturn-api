@@ -1,9 +1,9 @@
 const moment = require('moment')
 
-const { Controller } = require('./controller')
+const { Controller } = require('./Controller.controller')
 const { throwError, generateHtmlByTemplate, isEmptyObject } = require('../utils/functions')
-const { VerificationCodeController } = require('../controllers/verification-code-controller')
-const { ParameterController } = require('./parameter-controller')
+const { VerificationCodeController } = require('./VerificationCode.controller')
+const { ParameterController } = require('./Parameter.controller')
 
 class UserController extends Controller {
   /**

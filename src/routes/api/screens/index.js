@@ -1,4 +1,4 @@
-const { ScreenController } = require('../../../controllers/screen-controller')
+const { ScreenController } = require('../../../controllers/Screen.controller')
 const {
   getAllSchema,
   createSchema,

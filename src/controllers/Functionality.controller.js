@@ -1,4 +1,4 @@
-const { Controller } = require('./controller')
+const { Controller } = require('./Controller.controller')
 const { throwError } = require('../utils/functions')
 
 class FunctionalityController extends Controller {
