@@ -33,7 +33,12 @@ const functionalityRouteRoutes = async (app, options) => {
   // update one
   app.patch('/:id', { schema: updateSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const { params: { id }, body } = request
-    return { id, body }
+    const updated = await functionalityRouteController.updateFunctionalityRoute({
+      functionalityRouteId: id,
+      functionalityRoute: body
+    })
+
+    return updated
   })
 
   // delete one
