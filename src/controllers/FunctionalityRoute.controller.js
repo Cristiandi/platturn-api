@@ -29,6 +29,32 @@ class FunctionalityRouteController extends Controller {
     return createdFunctionalityRoute
   }
 
+  async getAllFunctionalitiesRoutes ({ attribute, value }) {
+    const { knex } = this.app
+
+    let query = knex.column(
+      'FR.id',
+      'R.id as routeId',
+      'R.httpMethod as routeMethod',
+      'R.path as routePath',
+      'F.id as functionalityId',
+      'F.name as functionality'
+    )
+      .from('FunctionalityRoute as FR')
+      .innerJoin('Route as R', 'FR.routeId', '=', 'R.id')
+      .innerJoin('Functionality as F', 'FR.functionalityId', '=', 'F.id')
+
+    if (attribute) {
+      query = query.where({ [attribute]: value })
+    }
+
+    query = query.orderBy('path', 'desc')
+
+    const functionalitiesRoutes = await query
+
+    return functionalitiesRoutes
+  }
+
   /**
    * function to check if it's possible to create a functionality route
    *

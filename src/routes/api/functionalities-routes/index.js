@@ -25,7 +25,9 @@ const functionalityRouteRoutes = async (app, options) => {
 
   // get all
   app.get('/', { schema: getAllSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
-    return []
+    const functionalitiesRoles = await functionalityRouteController.getAllFunctionalitiesRoutes({})
+
+    return functionalitiesRoles
   })
 
   // update one
