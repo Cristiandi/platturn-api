@@ -43,8 +43,13 @@ const functionalityRouteRoutes = async (app, options) => {
 
   // delete one
   app.delete('/:id', { schema: deleteSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
-    const { params: { id }, body } = request
-    return { id, body }
+    const { params: { id } } = request
+
+    const deleted = functionalityRouteController.deleteFunctionalityRoute({
+      functionalityRouteId: id
+    })
+
+    return deleted
   })
 }
 

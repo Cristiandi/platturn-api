@@ -72,6 +72,15 @@ class FunctionalityRouteController extends Controller {
     return updatedFunctionalityRoute
   }
 
+  async deleteFunctionalityRoute ({ functionalityRouteId }) {
+    const deletedFunctionalityRoute = await this.deleteOne({
+      id: functionalityRouteId,
+      tableName: 'RunctionalityRoute'
+    })
+
+    return deletedFunctionalityRoute
+  }
+
   /**
    * function to check if it's possible to create a functionality route
    *
