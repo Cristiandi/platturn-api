@@ -25,19 +25,31 @@ const functionalityRouteRoutes = async (app, options) => {
 
   // get all
   app.get('/', { schema: getAllSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
-    return []
+    const functionalitiesRoles = await functionalityRouteController.getAllFunctionalitiesRoutes({})
+
+    return functionalitiesRoles
   })
 
   // update one
   app.patch('/:id', { schema: updateSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
     const { params: { id }, body } = request
-    return { id, body }
+    const updated = await functionalityRouteController.updateFunctionalityRoute({
+      functionalityRouteId: id,
+      functionalityRoute: body
+    })
+
+    return updated
   })
 
   // delete one
   app.delete('/:id', { schema: deleteSchema, preHandler: [reqAuthPreHandler] }, async (request, reply) => {
-    const { params: { id }, body } = request
-    return { id, body }
+    const { params: { id } } = request
+
+    const deleted = functionalityRouteController.deleteFunctionalityRoute({
+      functionalityRouteId: id
+    })
+
+    return deleted
   })
 }
 

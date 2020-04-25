@@ -55,6 +55,12 @@ const seed = async (knex) => {
       name: 'EMAIL_ADDRESS_CHANGED_ALERT_SUBJECT',
       value: 'Has cambiado tú dirección correo electronico!',
       description: 'password changed alert subject'
+    },
+    {
+      id: 10,
+      name: 'DESARROLLADOR_ROLE_CODE',
+      value: 'RO01',
+      description: 'desarrollador role cole'
     }
   ]
 

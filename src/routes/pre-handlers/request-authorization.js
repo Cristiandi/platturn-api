@@ -60,12 +60,23 @@ const canTheUserHaveThis = async ({ app, userId, url, method }) => {
     decode: decodeURIComponent
   }
 
+  const urlToCheck = url.split('?')[0]
+
+  // app.log.info('urlToCheck', urlToCheck)
+
+  if (urlToCheck.startsWith('/api/documentation')) {
+    app.log.info('roles', roles)
+    const canAccessToDocumentation = routeController.canAccessToDocumentation({
+      rolesIds: roles.map(item => item.id)
+    })
+
+    return canAccessToDocumentation
+  }
+
   let requestedRoute = null
   for (const route of routes) {
     const keys = []
     const regexp = pathToRegexp(route.path, keys, opts)
-
-    const urlToCheck = url.split('?')[0]
 
     const result = regexp.exec(urlToCheck)
     if (result && route.httpMethod === method) {
@@ -74,7 +85,7 @@ const canTheUserHaveThis = async ({ app, userId, url, method }) => {
     }
   }
 
-  // app.log.info('requestedRoute', requestedRoute);
+  // app.log.info('requestedRoute', requestedRoute)
 
   // check the route
   if (!requestedRoute) {

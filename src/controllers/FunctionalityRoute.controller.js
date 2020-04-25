@@ -30,6 +30,58 @@ class FunctionalityRouteController extends Controller {
   }
 
   /**
+   * function to get all
+   *
+   * @param {{ attribute: object, value: string }} { attribute, value }
+   * @returns {Promise<{ id: number }[]>} object array
+   * @memberof FunctionalityRouteController
+   */
+  async getAllFunctionalitiesRoutes ({ attribute, value }) {
+    const { knex } = this.app
+
+    let query = knex.column(
+      'FR.id',
+      'R.id as routeId',
+      'R.httpMethod as routeMethod',
+      'R.path as routePath',
+      'F.id as functionalityId',
+      'F.name as functionality'
+    )
+      .from('FunctionalityRoute as FR')
+      .innerJoin('Route as R', 'FR.routeId', '=', 'R.id')
+      .innerJoin('Functionality as F', 'FR.functionalityId', '=', 'F.id')
+
+    if (attribute) {
+      query = query.where({ [attribute]: value })
+    }
+
+    query = query.orderBy('path', 'desc')
+
+    const functionalitiesRoutes = await query
+
+    return functionalitiesRoutes
+  }
+
+  async updateFunctionalityRoute ({ functionalityRouteId, functionalityRoute = {} }) {
+    const updatedFunctionalityRoute = await this.updateOne({
+      id: functionalityRouteId,
+      tableName: 'FunctionalityRoute',
+      objectToUpdate: functionalityRoute
+    })
+
+    return updatedFunctionalityRoute
+  }
+
+  async deleteFunctionalityRoute ({ functionalityRouteId }) {
+    const deletedFunctionalityRoute = await this.deleteOne({
+      id: functionalityRouteId,
+      tableName: 'FunctionalityRoute'
+    })
+
+    return deletedFunctionalityRoute
+  }
+
+  /**
    * function to check if it's possible to create a functionality route
    *
    * @param {{ functionalityRoute: object }} { functionalityRoute = {} }
@@ -70,6 +122,45 @@ class FunctionalityRouteController extends Controller {
       return {
         can: false,
         message: `already exists a functionality route for the functionality ${functionalityId} and the route ${routeId}.`
+      }
+    }
+
+    return {
+      can: true,
+      message: null
+    }
+  }
+
+  /**
+   * functio to check if it's possible to update a functionality route
+   *
+   * @param {{ functionalityRouteId: number }} { functionalityRouteId, functionalityRoute = {} }
+   * @returns
+   * @memberof FunctionalityRouteController
+   */
+  async canUpdate ({ functionalityRouteId, functionalityRoute = {} }) {
+    const { knex } = this.app
+
+    const data = await knex.select('*')
+      .from('FunctionalityRoute')
+      .where({
+        functionalityId: functionalityRoute.functionalityId || null,
+        routeId: functionalityRoute.routeId || null
+      })
+
+    if (!data.length) {
+      return {
+        can: true,
+        message: null
+      }
+    }
+
+    const [funcRouteFor] = data
+
+    if (functionalityRouteId !== funcRouteFor.id) {
+      return {
+        can: false,
+        message: `already exists a functionality route with the functionalityId ${functionalityRoute.functionalityId} and the route ${functionalityRoute.routeId}.`
       }
     }
 

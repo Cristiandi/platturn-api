@@ -1,4 +1,6 @@
 const { Controller } = require('./Controller.controller')
+const { ParameterController } = require('./Parameter.controller')
+const { RoleController } = require('./Role.controller')
 const { throwError } = require('../utils/functions')
 
 class RouteControllor extends Controller {
@@ -192,6 +194,28 @@ class RouteControllor extends Controller {
     // this.app.log.info('data', data);
 
     return data.length > 0
+  }
+
+  async canAccessToDocumentation ({ rolesIds = [] }) {
+    if (!rolesIds.length) throw throwError('roles id array is empty.', 400)
+
+    const parameterController = new ParameterController({ app: this.app })
+
+    const DESARROLLADOR_ROLE_CODE = await parameterController.getParameterValue({
+      name: 'DESARROLLADOR_ROLE_CODE'
+    })
+
+    const roleController = new RoleController({ app: this.app })
+    const { id: desarrolladorRoleId } = await roleController.getOneRole({
+      attribute: 'code',
+      value: DESARROLLADOR_ROLE_CODE
+    })
+
+    const role = rolesIds.find(item => item === desarrolladorRoleId)
+
+    // this.app.log.info('role', !!role)
+
+    return !!role
   }
 };
 
