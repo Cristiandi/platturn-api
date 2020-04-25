@@ -62,6 +62,8 @@ const canTheUserHaveThis = async ({ app, userId, url, method }) => {
 
   const urlToCheck = url.split('?')[0]
 
+  // app.log.info('urlToCheck', urlToCheck)
+
   if (urlToCheck.startsWith('/api/documentation')) {
     app.log.info('roles', roles)
     const canAccessToDocumentation = routeController.canAccessToDocumentation({
@@ -83,7 +85,7 @@ const canTheUserHaveThis = async ({ app, userId, url, method }) => {
     }
   }
 
-  // app.log.info('requestedRoute', requestedRoute);
+  // app.log.info('requestedRoute', requestedRoute)
 
   // check the route
   if (!requestedRoute) {

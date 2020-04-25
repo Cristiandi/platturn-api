@@ -75,7 +75,7 @@ class FunctionalityRouteController extends Controller {
   async deleteFunctionalityRoute ({ functionalityRouteId }) {
     const deletedFunctionalityRoute = await this.deleteOne({
       id: functionalityRouteId,
-      tableName: 'RunctionalityRoute'
+      tableName: 'FunctionalityRoute'
     })
 
     return deletedFunctionalityRoute

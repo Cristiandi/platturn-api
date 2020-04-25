@@ -16,9 +16,9 @@ const tags = ['functionalities-routes']
 const paramsJsonSchema = {
   type: 'object',
   properties: {
-    screenId: { type: 'number' }
+    id: { type: 'number' }
   },
-  required: ['screenId']
+  required: ['id']
 }
 
 const queryStringJsonSchema = {
