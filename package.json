@@ -29,7 +29,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "fastify": "^2.12.0",
-    "fastify-helmet": "^3.0.2",
+    "fastify-helmet": "^4.0.0",
     "fastify-plugin": "^2.0.0",
     "fastify-rate-limit": "^3.0.1",
     "fastify-swagger": "^2.5.0",
