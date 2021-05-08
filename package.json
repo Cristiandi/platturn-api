@@ -35,7 +35,7 @@
     "fastify-swagger": "^3.0.0",
     "firebase": "^7.8.1",
     "firebase-admin": "^9.0.0",
-    "handlebars": "^4.7.3",
+    "handlebars": "^4.7.7",
     "knex": "^0.21.0",
     "mjml": "^4.5.1",
     "moment": "^2.24.0",
