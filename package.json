@@ -34,7 +34,7 @@
     "fastify-rate-limit": "^4.0.0",
     "fastify-swagger": "^3.0.0",
     "firebase": "^7.8.1",
-    "firebase-admin": "^9.0.0",
+    "firebase-admin": "^11.4.1",
     "handlebars": "^4.7.7",
     "knex": "^0.21.0",
     "mjml": "^4.5.1",
